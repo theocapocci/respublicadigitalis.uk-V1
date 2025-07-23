@@ -2,25 +2,19 @@
 // src/layouts/RepublicLayout.astro
 // This is a basic layout for your digital republic notes.
 // You can customize it with your site's header, footer, styling, etc.
+import '../styles/global.css'; // Import the global CSS file directly
 const { frontmatter } = Astro.props;
+// Ensure frontmatter exists before trying to access its properties
+const title = frontmatter?.title || 'Untitled Note';
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{frontmatter.title} | Respublica Digitalis</title>
+    <title>{title} | Respublica Digitalis</title>
     <style>
-        /* Basic styling for readability */
-        body {
-            font-family: sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            max-width: 800px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
+        /* Local styles for RepublicLayout.astro, overriding global where necessary */
         header {
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
@@ -32,16 +26,27 @@ const { frontmatter } = Astro.props;
             text-decoration: none;
             color: #007bff;
             font-weight: bold;
+            /* font-family is inherited from body (Cormorant Garamond) */
         }
         nav a:hover {
             text-decoration: underline;
         }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant Garamond', serif; /* Headings use Cormorant Garamond */
+            font-weight: 300; /* As per your original CSS for headings */
+            text-transform: none;
+            letter-spacing: 0.05em;
         }
-        main {
-            padding-bottom: 40px;
+        h1 { font-size: 2.8rem; opacity: 0.65; }
+        h2 { font-size: 2.2rem; opacity: 0.5; }
+        h3 { font-size: 1.8rem; opacity: 0.5; }
+        /* Apply Sorts Mill Goudy to main content paragraphs */
+        main p {
+            font-family: 'Sorts Mill Goudy', serif;
+            font-size: 26px; /* Your desired font size for content */
+            line-height: 1.9;
+            margin-bottom: 2em;
+            max-width: 60ch; /* Limit line length for readability */
         }
         footer {
             border-top: 1px solid #eee;
@@ -50,6 +55,7 @@ const { frontmatter } = Astro.props;
             text-align: center;
             color: #777;
             font-size: 0.9em;
+            /* font-family is inherited from body (Cormorant Garamond) */
         }
     </style>
 </head>
@@ -57,13 +63,13 @@ const { frontmatter } = Astro.props;
     <header>
         <nav>
             <a href="/">Home</a>
-            <a href="/notes/">Digital Republic Index</a> {/* Link to your notes index */}
+            <a href="/republic/">Digital Republic Index</a>
             <!-- Add other navigation links here -->
         </nav>
     </header>
 
     <main>
-        <h1>{frontmatter.title}</h1>
+        <h1>{title}</h1>
         <slot /> {/* This is where your individual note's content will be injected */}
     </main>
 

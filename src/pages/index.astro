@@ -1,6 +1,7 @@
 ---
 // src/pages/index.astro
 // This is your homepage.
+import '../styles/global.css'; // Import the global CSS file directly
 ---
 
 <!DOCTYPE html>
@@ -11,8 +12,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Respublica Digitalis - Home</title>
-		{/* Link to your global CSS file */}
-		<link rel="stylesheet" href="/src/styles/global.css" />
+		{/* Removed: <link rel="stylesheet" href="/src/styles/global.css" /> */}
 		<style>
 			/* Local styles for index.astro, overriding global where necessary */
 			.main-content-container { /* New container for main content */
