@@ -1,0 +1,74 @@
+---
+// src/layouts/RepublicLayout.astro
+// This is a basic layout for your digital republic notes.
+// You can customize it with your site's header, footer, styling, etc.
+const { frontmatter } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{frontmatter.title} | Respublica Digitalis</title>
+    <style>
+        /* Basic styling for readability */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        main {
+            padding-bottom: 40px;
+        }
+        footer {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 30px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/notes/">Digital Republic Index</a> {/* Link to your notes index */}
+            <!-- Add other navigation links here -->
+        </nav>
+    </header>
+
+    <main>
+        <h1>{frontmatter.title}</h1>
+        <slot /> {/* This is where your individual note's content will be injected */}
+    </main>
+
+    <footer>
+        <p>&copy; {new Date().getFullYear()} Respublica Digitalis</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,20 @@
+---
+// src/pages/notes/[...slug].astro
+import { getCollection } from 'astro:content';
+import RepublicLayout from '../layouts/RepublicLayout.astro'; 
+
+export async function getStaticPaths() {
+  const notesEntries = await getCollection('notes'); // IMPORTANT: Changed to 'notes'
+  return notesEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<RepublicLayout frontmatter={entry.data}>
+  <Content />
+</Layout>
