@@ -2,11 +2,100 @@
 
 /*
  * =========================================
- * 1. FONT IMPORTS
+ * 1. FONT DEFINITIONS (@font-face)
  * =========================================
- * Import all necessary fonts from Google Fonts.
+ * Define all necessary fonts, pointing to local files.
+ * Use woff2 for modern browsers, woff for broader support.
+ * Ensure paths are correct relative to the CSS file, or from the root if used with /public/
 */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Cormorant+SC:wght@400&family=Sorts+Mill+Goudy:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* Cormorant Garamond */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 300 400; /* Define the range of weights available in the variable font */
+  src: url('/fonts/Cormorant_Garamond/CormorantGaramond-VariableFont_wght.ttf') format('truetype'); /* Changed to .ttf format */
+  font-display: swap; /* Ensures text is visible while font loads */
+}
+
+/* Cormorant SC - Specific weights from provided .ttf files */
+@font-face {
+  font-family: 'Cormorant SC';
+  font-style: normal;
+  font-weight: 300; /* Light */
+  src: url('/fonts/Cormorant_SC/CormorantSC-Light.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cormorant SC';
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url('/fonts/Cormorant_SC/CormorantSC-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cormorant SC';
+  font-style: normal;
+  font-weight: 500; /* Medium */
+  src: url('/fonts/Cormorant_SC/CormorantSC-Medium.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cormorant SC';
+  font-style: normal;
+  font-weight: 600; /* SemiBold */
+  src: url('/fonts/Cormorant_SC/CormorantSC-SemiBold.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cormorant SC';
+  font-style: normal;
+  font-weight: 700; /* Bold */
+  src: url('/fonts/Cormorant_SC/CormorantSC-Bold.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Sorts Mill Goudy */
+@font-face {
+  font-family: 'Sorts Mill Goudy';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/SortsMillGoudy-Regular.woff2') format('woff2'), /* Adjust filename if different */
+       url('/fonts/SortsMillGoudy-Regular.woff') format('woff');   /* Adjust filename if different */
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sorts Mill Goudy';
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/SortsMillGoudy-Italic.woff2') format('woff2'), /* Adjust filename if different */
+       url('/fonts/SortsMillGoudy-Italic.woff') format('woff');   /* Adjust filename if different */
+  font-display: swap;
+}
+
+
+/* Sorts Mill Goudy - Using provided .ttf files */
+@font-face {
+  font-family: 'Sorts Mill Goudy';
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url('/fonts/Sorts_Mill_Goudy/SortsMillGoudy-Regular.ttf') format('truetype'); /* Changed to .ttf */
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sorts Mill Goudy';
+  font-style: italic;
+  font-weight: 400; /* Italic */
+  src: url('/fonts/Sorts_Mill_Goudy/SortsMillGoudy-Italic.ttf') format('truetype'); /* Changed to .ttf */
+  font-display: swap;
+}
+
 
 /*
  * =========================================
