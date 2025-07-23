@@ -20,58 +20,61 @@
 				background-color: #f4f7f6; /* Light background */
 				color: #333;
 			}
-			.container {
+			.main-content-container { /* New container for main content */
 				max-width: 960px;
 				margin: 0 auto;
 				padding: 20px;
-			}
-			h1 {
-				color: #2c3e50;
-				text-align: center;
-				margin-bottom: 40px;
 			}
 
 			/* Banner specific styles */
 			.banner {
 				background-color: #2c3e50; /* Dark blue background */
 				color: #ecf0f1; /* Light text */
-				padding: 60px 20px;
-				text-align: center;
-				border-radius: 12px; /* Rounded corners */
-				box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-				margin-bottom: 40px;
-				transition: transform 0.3s ease-in-out;
-			}
-			.banner:hover {
-				transform: translateY(-5px); /* Slight lift on hover */
+				padding: 20px 40px; /* Adjusted padding */
+				display: flex; /* Use flexbox for alignment */
+				justify-content: space-between; /* Space out title and button */
+				align-items: center; /* Vertically align items */
+				margin-bottom: 40px; /* Space below the banner */
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 			}
 			.banner h2 {
-				font-size: 2.5em;
-				margin-bottom: 20px;
+				font-size: 2em; /* Adjusted font size for title */
+				margin: 0; /* Remove default margin */
 				color: #ffffff;
-			}
-			.banner p {
-				font-size: 1.2em;
-				margin-bottom: 30px;
-				max-width: 700px;
-				margin-left: auto;
-				margin-right: auto;
 			}
 			.banner a.button {
 				display: inline-block;
 				background-color: #3498db; /* Blue button */
 				color: white;
-				padding: 15px 30px;
+				padding: 10px 20px; /* Adjusted padding for button */
 				text-decoration: none;
 				border-radius: 8px;
 				font-weight: bold;
 				transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 			}
 			.banner a.button:hover {
 				background-color: #2980b9; /* Darker blue on hover */
 				transform: translateY(-2px);
 			}
+
+			/* Homepage content styles */
+			.homepage-content {
+				padding: 20px 0; /* Padding for the content area */
+				text-align: center; /* Example alignment for content */
+			}
+			.homepage-content h1 {
+				font-size: 2.8em;
+				color: #2c3e50;
+				margin-bottom: 20px;
+			}
+			.homepage-content p {
+				font-size: 1.1em;
+				line-height: 1.8;
+				max-width: 700px;
+				margin: 0 auto 30px auto;
+			}
+
 
 			/* Footer styles */
 			footer {
@@ -85,20 +88,26 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<h1>My Astro Site - Respublica Digitalis</h1>
+		<header class="banner">
+			<h2>Digital Republic</h2> {/* Title in top-left of banner */}
+			<a href="/republic/" class="button">Enter the Republic</a> {/* Button in top-right of banner */}
+		</header>
 
-			<section class="banner">
-				<h2>Digital Republic</h2> {/* Updated title in the banner */}
+		<div class="main-content-container">
+			<section class="homepage-content">
+				<h1>Welcome to Respublica Digitalis</h1>
 				<p>
-					Welcome to my public space for learning and sharing.
-					Dive into a collection of thoughts, notes, and ideas.
+					This is the central hub for my public learning journey.
+					Here you'll find insights, projects, and thoughts on various topics.
+					Feel free to browse around and explore!
 				</p>
-				<a href="/republic/" class="button">Enter the Republic</a>
+				<!-- Add more homepage content and links here -->
+				<p>Check out some of my recent thoughts:</p>
+				<ul>
+					<li><a href="/notes/example-note-1" class="text-blue-600 hover:underline">Example Note 1 Title</a></li>
+					<li><a href="/notes/example-note-2" class="text-blue-600 hover:underline">Example Note 2 Title</a></li>
+				</ul>
 			</section>
-
-			{/* You can add more content to your homepage here */}
-
 		</div>
 
 		<footer>
