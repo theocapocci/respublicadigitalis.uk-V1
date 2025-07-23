@@ -1,4 +1,5 @@
 ---
+title: Contents
 dg-publish: true
 dg-home: true
 dr-publish: true
