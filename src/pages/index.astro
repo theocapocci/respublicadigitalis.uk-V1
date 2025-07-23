@@ -12,106 +12,129 @@ import '../styles/global.css'; // Import the global CSS file directly
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Respublica Digitalis - Home</title>
-		{/* Removed: <link rel="stylesheet" href="/src/styles/global.css" /> */}
 		<style>
 			/* Local styles for index.astro, overriding global where necessary */
 			.main-content-container { /* New container for main content */
-				max-width: 960px;
+				max-width: 1200px; /* INCREASED this max-width to allow content to be wider */
 				margin: 0 auto;
 				padding: 20px;
 			}
 
 			/* Banner specific styles */
 			.banner {
-				background-color: #2c3e50; /* Dark blue background */
-				color: #ecf0f1; /* Light text */
-				padding: 20px 40px; /* Adjusted padding */
-				display: flex; /* Use flexbox for alignment */
-				justify-content: space-between; /* Space out title and button */
-				align-items: center; /* Vertically align items */
-				margin-bottom: 40px; /* Space below the banner */
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+				color: #3A3A3A; /* Soft black text */
+				padding: 40px 40px; /* Increased top/bottom padding */
+				display: flex;
+				justify-content: flex-end; /* Pushes the dropdown-link to the far right */
+				align-items: center;
+				margin-bottom: 0px; /* Reduced vertical space below the banner */
+				box-shadow: none; /* Remove shadow */
+				position: relative; /* This makes the absolute positioning of the title work correctly */
+				border-bottom: 1px solid #E8E5DF; /* Subtle, warm grey divider */
+			}
+			.banner-title-wrapper {
+				position: absolute;
+				left: 50%;
+				top: 50%; /* Vertically align to the middle */
+				transform: translate(-50%, -50%); /* Center on both axes */
+				text-align: center;
+				z-index: 1;
 			}
 			.banner h2 {
-				font-family: 'Cormorant SC', serif; /* Use Cormorant SC for banner title */
-				font-size: 2em; /* Adjusted font size for title */
+				font-family: 'Cormorant SC', serif;
+				font-size: 3.0em;
 				margin: 0; /* Remove default margin */
-				color: #ffffff;
+				color: #526269; /* Deep blue-grey color for the title */
+				line-height: 0.9; /* Adjust line height for two-line title */
 			}
-			.banner a.button {
-				display: inline-block;
-				background-color: #3498db; /* Blue button */
-				color: white;
-				padding: 10px 20px; /* Adjusted padding for button */
-				text-decoration: none;
-				border-radius: 8px;
+			.banner a.dropdown-link { /* New class for the text link */
+				display: inline-flex; /* Use flex to align text and icon */
+				align-items: center;
+				gap: 5px; /* Space between text and icon */
+				color: #6F8A9B; /* Muted blue-grey link color */
+				text-decoration: none; /* Remove underline by default */
 				font-weight: bold;
-				transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-				/* font-family is inherited from body, no need to set here unless different */
+				transition: color 0.3s ease-in-out;
+				background: none;
+				padding: 0;
+				border-radius: 0;
+				box-shadow: none;
+				transform: none;
+				z-index: 2; /* Ensure it's above the title if overlapping */
 			}
-			.banner a.button:hover {
-				background-color: #2980b9; /* Darker blue on hover */
-				transform: translateY(-2px);
+			.banner a.dropdown-link:hover {
+				color: #4A6D7C; /* Slightly darker muted blue-grey on hover */
+				text-decoration: underline; /* Add underline on hover */
+				transform: none;
+			}
+			.dropdown-link svg {
+				width: 1em; /* Size the SVG icon relative to font size */
+				height: 1em;
+				fill: currentColor; /* Make SVG color match text color */
 			}
 
 			/* Homepage content styles */
 			.homepage-content {
-				padding: 20px 0; /* Padding for the content area */
-				text-align: center; /* Example alignment for content */
+				padding: 20px 0;
+				text-align: left; /* Changed to left-align text */
+				max-width: 1100px; /* Increased max-width for wider content area */
+				margin: 0 auto; /* Ensure it remains centered */
 			}
 			.homepage-content h1 {
-				/* font-family is inherited from body, no need to set here unless different */
-				font-size: 2.8em;
-				color: #2c3e50;
+				font-family: 'Cormorant Garamond', serif; /* Explicitly set font-family */
+				font-weight: 300; /* Set to a thinner weight */
+				font-size: 3.2em; /* Increased font size */
+				color: #3A3A3A; /* Soft black, consistent with body text */
 				margin-bottom: 20px;
 			}
 			.homepage-content p {
-				font-family: 'Sorts Mill Goudy', serif; /* Use Sorts Mill Goudy for main content paragraphs */
-				font-size: 1.1em;
+				font-family: 'Sorts Mill Goudy', serif;
+				font-size: 1.3em; /* Increased font size */
 				line-height: 1.8;
-				max-width: 700px;
-				margin: 0 auto 30px auto;
+				margin: 0 auto 30px auto; /* Keep auto margins for centering the block if it's narrower than its container */
 			}
 			.homepage-content ul {
-				list-style: none; /* Remove default bullet points */
+				list-style: none;
 				padding: 0;
 			}
 			.homepage-content ul li a {
-				/* font-family is inherited from body, no need to set here unless different */
-				font-size: 1.1em;
+				font-size: 1.3em; /* Increased font size */
+				color: #6F8A9B; /* Muted blue-grey link color */
 			}
-
 
 			/* Footer styles */
 			footer {
 				text-align: center;
 				padding: 20px;
-				border-top: 1px solid #eee;
+				border-top: 1px solid #E8E5DF; /* Subtle, warm grey divider */
 				margin-top: 40px;
-				color: #777;
+				color: #3A3A3A; /* Soft black, consistent with body text */
 				font-size: 0.9em;
-				/* font-family is inherited from body, no need to set here unless different */
 			}
 		</style>
 	</head>
 	<body>
 		<header class="banner">
-			<h2>Digital Republic</h2> {/* Title in top-left of banner */}
-			<a href="/republic/" class="button">Enter the Republic</a> {/* Button in top-right of banner */}
+			<div class="banner-title-wrapper"> {/* Wrapper for centering the title */}
+				<h2>Digital<br />Republic</h2>
+			</div>
+			<a href="/republic/" class="dropdown-link">
+				Explore Notes
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+			</a>
 		</header>
 
 		<div class="main-content-container">
 			<section class="homepage-content">
-				<h1>Welcome to Respublica Digitalis</h1>
-				<p>
-					This is the central hub for my public learning journey.
-					Here you'll find insights, projects, and thoughts on various topics.
-					Feel free to browse around and explore!
+				<h1>Welcome to my <em>Respublica Digitalis</em></h1>
+				<p><em>Lit. digital public thing.</em></p>
+				<p>	
+				The point of this site is to provide a space for me to make my learning public. 
+				It is a riff on the idea of a [digital garden](https://maggieappleton.com/garden-history).
 				</p>
 				<p>Check out some of my recent thoughts:</p>
 				<ul>
-					<li><a href="/notes/example-note-1" class="text-blue-600 hover:underline">Example Note 1 Title</a></li>
+					<li><a href="/contents" class="text-blue-600 hover:underline">Note!</a></li>
 					<li><a href="/notes/example-note-2" class="text-blue-600 hover:underline">Example Note 2 Title</a></li>
 				</ul>
 			</section>
