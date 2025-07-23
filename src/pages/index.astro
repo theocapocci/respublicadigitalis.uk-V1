@@ -1,16 +1,108 @@
 ---
-
+// src/pages/index.astro
+// This is your homepage.
 ---
 
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Respublica Digitalis - Home</title>
+		<style>
+			/* Basic global styles */
+			body {
+				font-family: sans-serif;
+				line-height: 1.6;
+				margin: 0;
+				background-color: #f4f7f6; /* Light background */
+				color: #333;
+			}
+			.container {
+				max-width: 960px;
+				margin: 0 auto;
+				padding: 20px;
+			}
+			h1 {
+				color: #2c3e50;
+				text-align: center;
+				margin-bottom: 40px;
+			}
+
+			/* Banner specific styles */
+			.banner {
+				background-color: #2c3e50; /* Dark blue background */
+				color: #ecf0f1; /* Light text */
+				padding: 60px 20px;
+				text-align: center;
+				border-radius: 12px; /* Rounded corners */
+				box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+				margin-bottom: 40px;
+				transition: transform 0.3s ease-in-out;
+			}
+			.banner:hover {
+				transform: translateY(-5px); /* Slight lift on hover */
+			}
+			.banner h2 {
+				font-size: 2.5em;
+				margin-bottom: 20px;
+				color: #ffffff;
+			}
+			.banner p {
+				font-size: 1.2em;
+				margin-bottom: 30px;
+				max-width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.banner a.button {
+				display: inline-block;
+				background-color: #3498db; /* Blue button */
+				color: white;
+				padding: 15px 30px;
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: bold;
+				transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+			}
+			.banner a.button:hover {
+				background-color: #2980b9; /* Darker blue on hover */
+				transform: translateY(-2px);
+			}
+
+			/* Footer styles */
+			footer {
+				text-align: center;
+				padding: 20px;
+				border-top: 1px solid #eee;
+				margin-top: 40px;
+				color: #777;
+				font-size: 0.9em;
+			}
+		</style>
 	</head>
 	<body>
-		<h1>My Astro Site</h1>
+		<div class="container">
+			<h1>My Astro Site - Respublica Digitalis</h1>
+
+			<section class="banner">
+				<h2>Digital Republic</h2> {/* Updated title in the banner */}
+				<p>
+					Welcome to my public space for learning and sharing.
+					Dive into a collection of thoughts, notes, and ideas.
+				</p>
+				<a href="/republic/" class="button">Enter the Republic</a>
+			</section>
+
+			{/* You can add more content to your homepage here */}
+
+		</div>
+
+		<footer>
+			<p>&copy; {new Date().getFullYear()} Respublica Digitalis</p>
+		</footer>
 	</body>
 </html>
