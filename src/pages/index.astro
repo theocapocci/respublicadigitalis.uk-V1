@@ -11,15 +11,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Respublica Digitalis - Home</title>
+		{/* Link to your global CSS file */}
+		<link rel="stylesheet" href="/src/styles/global.css" />
 		<style>
-			/* Basic global styles */
-			body {
-				font-family: sans-serif;
-				line-height: 1.6;
-				margin: 0;
-				background-color: #f4f7f6; /* Light background */
-				color: #333;
-			}
+			/* Local styles for index.astro, overriding global where necessary */
 			.main-content-container { /* New container for main content */
 				max-width: 960px;
 				margin: 0 auto;
@@ -38,6 +33,7 @@
 				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 			}
 			.banner h2 {
+				font-family: 'Cormorant SC', serif; /* Use Cormorant SC for banner title */
 				font-size: 2em; /* Adjusted font size for title */
 				margin: 0; /* Remove default margin */
 				color: #ffffff;
@@ -52,6 +48,7 @@
 				font-weight: bold;
 				transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				/* font-family is inherited from body, no need to set here unless different */
 			}
 			.banner a.button:hover {
 				background-color: #2980b9; /* Darker blue on hover */
@@ -64,15 +61,25 @@
 				text-align: center; /* Example alignment for content */
 			}
 			.homepage-content h1 {
+				/* font-family is inherited from body, no need to set here unless different */
 				font-size: 2.8em;
 				color: #2c3e50;
 				margin-bottom: 20px;
 			}
 			.homepage-content p {
+				font-family: 'Sorts Mill Goudy', serif; /* Use Sorts Mill Goudy for main content paragraphs */
 				font-size: 1.1em;
 				line-height: 1.8;
 				max-width: 700px;
 				margin: 0 auto 30px auto;
+			}
+			.homepage-content ul {
+				list-style: none; /* Remove default bullet points */
+				padding: 0;
+			}
+			.homepage-content ul li a {
+				/* font-family is inherited from body, no need to set here unless different */
+				font-size: 1.1em;
 			}
 
 
@@ -84,6 +91,7 @@
 				margin-top: 40px;
 				color: #777;
 				font-size: 0.9em;
+				/* font-family is inherited from body, no need to set here unless different */
 			}
 		</style>
 	</head>
@@ -101,7 +109,6 @@
 					Here you'll find insights, projects, and thoughts on various topics.
 					Feel free to browse around and explore!
 				</p>
-				<!-- Add more homepage content and links here -->
 				<p>Check out some of my recent thoughts:</p>
 				<ul>
 					<li><a href="/notes/example-note-1" class="text-blue-600 hover:underline">Example Note 1 Title</a></li>
