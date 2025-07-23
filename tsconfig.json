@@ -1,0 +1,12 @@
+// tsconfig.json (at the project root)
+{
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "jsx": "react-jsx", // Or "preserve" if you're not using React
+    "jsxImportSource": "react", // Only if using React
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}
