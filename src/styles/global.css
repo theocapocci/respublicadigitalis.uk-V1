@@ -93,3 +93,38 @@ body {
 }
 
 /* Add any other truly global styles here */
+
+
+/* Styles for paragraphs, lists, etc., inside the content area */
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote {
+  font-family: 'Sorts Mill Goudy', serif;
+  font-size: 1.55rem;
+  line-height: 1.9;
+  max-width: 80ch;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2em;
+}
+
+/* Styles for headings inside the content area */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+}
+
+.prose h1 { font-size: 2.8rem; opacity: 0.65; }
+.prose h2 { font-size: 2.2rem; opacity: 0.5; }
+.prose h3 { font-size: 1.8rem; opacity: 0.5; }

@@ -33,14 +33,26 @@ const title = frontmatter?.title || 'Untitled Note';
         }
 
         /* Heading styles - these will be left-aligned within the main content block */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Cormorant Garamond', serif; /* Headings use Cormorant Garamond */
-            font-weight: 300; /* As per your original CSS for headings */
+        /* New, specific style for the LAYOUT'S main title */
+        h1 {
+            font-family: 'Cormorant SC', serif;
+            font-size: 4rem;      /* Larger font size */
+            text-align: left;   /* Center the title */
+            opacity: 1;           /* Make it fully opaque */
+            font-weight: 700;     /* Make it bolder */
+            margin-bottom: 2rem;  /* Add some space below it */
+            letter-spacing: 0.05em;
+            text-transform: none;
+        }
+
+        /* Styles for any OTHER headings that might be in the layout (h2, h3, etc.) */
+        h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
             text-transform: none;
             letter-spacing: 0.05em;
-            text-align: left; /* Ensure headings are left-aligned */
+            text-align: left;
         }
-        h1 { font-size: 2.8rem; opacity: 0.65; }
         h2 { font-size: 2.2rem; opacity: 0.5; }
         h3 { font-size: 1.8rem; opacity: 0.5; }
 
@@ -52,47 +64,6 @@ const title = frontmatter?.title || 'Untitled Note';
             text-align: left;   /* Make all text content within main left-aligned */
             padding-bottom: 40px; /* Keep existing bottom padding */
         }
-
-        /* Styles for content rendered by Markdown (within the <slot />) */
-        /* This targets all direct children of the slot, which are typically Markdown-rendered elements */
-        main :global(p), /* Target paragraphs directly rendered from Markdown */
-        main :global(ul),
-        main :global(ol),
-        main :global(blockquote),
-        main :global(img)
-        {
-            /* Apply Sorts Mill Goudy to main content paragraphs */
-            font-family: 'Sorts Mill Goudy', serif; /* This will apply to all text elements within the slot */
-            font-size: 1.55390625rem;
-            line-height: 1.9;
-            margin-bottom: 2em; /* Keep em for line-height related spacing */
-            max-width: 80ch; /* Increased from 60ch to 80ch for more text on a single line */
-            margin-left: auto;   /* Center the block itself if narrower than 60ch */
-            margin-right: auto;  /* Center the block itself if narrower than 60ch */
-            text-align: left; /* Ensure text within these is also left-aligned */
-        }
-
-        /* Specific font size and reduced margin for headings rendered by the slot */
-        main :global(h1),
-        main :global(h2),
-        main :global(h3),
-        main :global(h4),
-        main :global(h5),
-        main :global(h6)
-        {
-            font-family: 'Cormorant Garamond', serif; /* Ensure headings use Cormorant Garamond */
-            font-weight: 300;
-            text-transform: none;
-            letter-spacing: 0.05em;
-            text-align: left;
-            margin-top: 1.5em; /* Adjust top margin for spacing above headings */
-            margin-bottom: 0.5em; /* Reduced bottom margin for spacing below headings */
-            line-height: 1.2; /* Adjust line height for headings */
-        }
-        main :global(h1) { font-size: 2.8rem; opacity: 0.65; }
-        main :global(h2) { font-size: 2.2rem; opacity: 0.5; }
-        main :global(h3) { font-size: 1.8rem; opacity: 0.5; }
-
 
         footer {
             border-top: 1px solid #eee;
@@ -113,10 +84,11 @@ const title = frontmatter?.title || 'Untitled Note';
     </header>
 
     <main>
-        <h1>{title}</h1> {/* This H1 is part of the layout, not the slot */}
-        <slot /> {/* This is where your individual note's content will be injected */}
-    </main>
-
+        <h1>{title}</h1>
+        <article class="prose">
+            <slot />
+        </article>
+        </main>
     <footer>
         <p>&copy; {new Date().getFullYear()} Respublica Digitalis</p>
     </footer>
