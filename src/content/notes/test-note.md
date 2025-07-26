@@ -1,5 +1,5 @@
 ---
-title: Contents
+title: Test note
 dg-publish: false
 dr-publish: true
 ---
