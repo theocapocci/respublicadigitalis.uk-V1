@@ -12,3 +12,8 @@ The quick brown fox jumped over the lazy dog.
 New bit. 
 
 …
+
+
+# Heading 1
+
+## Heading 2
