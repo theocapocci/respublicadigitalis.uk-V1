@@ -1,10 +1,7 @@
 ---
 // src/layouts/RepublicLayout.astro
-// This is a basic layout for your digital republic notes.
-// You can customize it with your site's header, footer, styling, etc.
-import '../styles/global.css'; // Import the global CSS file directly
+import '../styles/global.css'; // Your global styles
 const { frontmatter } = Astro.props;
-// Ensure frontmatter exists before trying to access its properties
 const title = frontmatter?.title || 'Untitled Note';
 ---
 <!DOCTYPE html>
@@ -13,74 +10,97 @@ const title = frontmatter?.title || 'Untitled Note';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title} | Respublica Digitalis</title>
-    <style scoped> /* Explicitly added 'scoped' attribute */
-        /* Local styles for RepublicLayout.astro, overriding global where necessary */
+    <style>
+        /*
+          Styles for RepublicLayout.astro.
+          The header styles below are copied directly from index.astro to ensure an identical look.
+        */
 
-        header {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-            text-align: center; /* Centers the navigation links */
+        /* Banner styles from index.astro */
+        .banner {
+            color: #3A3A3A;
+            padding: 40px 40px;
+            display: flex;
+            justify-content: flex-end; /* Pushes the dropdown-link to the far right */
+            align-items: center;
+            margin-bottom: 0px;
+            box-shadow: none;
+            position: relative; /* This makes the absolute positioning of the title work correctly */
+            border-bottom: 1px solid #E8E5DF; /* Subtle, warm grey divider */
         }
-        nav a {
-            margin: 0 15px;
+        .banner-title-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+        .banner h2 {
+            font-family: 'Cormorant SC', serif;
+            font-size: 3.0em;
+            margin: 0;
+            color: #526269; /* Deep blue-grey color for the title */
+            line-height: 0.9;
+        }
+        .banner a.dropdown-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #6F8A9B;
             text-decoration: none;
-            color: #007bff;
             font-weight: bold;
+            transition: color 0.3s ease-in-out;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            transform: none;
+            z-index: 2; /* Ensure it's above the title if overlapping */
         }
-        nav a:hover {
+        .banner a.dropdown-link:hover {
+            color: #4A6D7C;
             text-decoration: underline;
         }
-
-        /* Heading styles - these will be left-aligned within the main content block */
-        /* New, specific style for the LAYOUT'S main title */
-        h1 {
-            font-family: 'Cormorant SC', serif;
-            font-size: 4rem;      /* Larger font size */
-            text-align: left;   /* Center the title */
-            opacity: 1;           /* Make it fully opaque */
-            font-weight: 700;     /* Make it bolder */
-            margin-bottom: 2rem;  /* Add some space below it */
-            letter-spacing: 0.05em;
-            text-transform: none;
+        .dropdown-link svg {
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
         }
 
-        /* Styles for any OTHER headings that might be in the layout (h2, h3, etc.) */
-        h2, h3, h4, h5, h6 {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 300;
-            text-transform: none;
-            letter-spacing: 0.05em;
-            text-align: left;
-        }
-        h2 { font-size: 2.2rem; opacity: 0.5; }
-        h3 { font-size: 1.8rem; opacity: 0.5; }
-
-        /* Main content area: centered block, left-aligned text */
+        /* Layout styles for the note content */
         main {
-            max-width: 850px;   /* Increased from 800px to 1000px */
-            margin: 0 auto;     /* Center the main content area itself on the page */
-            padding: 20px;      /* Add padding inside the main content area */
-            text-align: left;   /* Make all text content within main left-aligned */
-            padding-bottom: 40px; /* Keep existing bottom padding */
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px 20px; /* Added top padding to give space below header */
+        }
+
+        main h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
         }
 
         footer {
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-            margin-top: 30px;
+            max-width: 850px;
+            margin: 30px auto 0;
+            padding: 15px 20px;
+            border-top: 1px solid #E8E5DF; /* Matching the header's border color */
             text-align: center;
-            color: #777;
-            font-size: 0.9em;
+            color: #3A3A3A;
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/republic/">Digital Republic Index</a>
-            </nav>
+    <header class="banner">
+        <div class="banner-title-wrapper">
+            <h2>Digital<br />Republic</h2>
+        </div>
+        <a href="/" class="dropdown-link">
+            Home
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
     </header>
 
     <main>
@@ -88,7 +108,8 @@ const title = frontmatter?.title || 'Untitled Note';
         <article class="prose">
             <slot />
         </article>
-        </main>
+    </main>
+
     <footer>
         <p>&copy; {new Date().getFullYear()} Respublica Digitalis</p>
     </footer>
