@@ -6,13 +6,9 @@ import matter from 'gray-matter'; // For parsing YAML frontmatter
 import slugify from 'slugify'; // For creating clean URL slugs
 
 // --- Configuration ---
-// IMPORTANT: Update this path to your actual Obsidian vault location.
-// Ensure it's an absolute path or relative to where you run this script.
-const OBSIDIAN_VAULT_PATH = 'C:/Users/theob/Documents/Obsidian/obsidian-vault';
+const OBSIDIAN_VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || 'C:/Users/theob/Documents/Obsidian/obsidian-vault';
+const ASTRO_CONTENT_PATH = process.env.ASTRO_CONTENT_PATH || path.resolve('./src/content/notes');
 
-// Path where published notes will go in Astro.
-// This points to your existing 'notes' content collection directory.
-const ASTRO_CONTENT_PATH = path.resolve('./src/content/notes'); // Files are copied here
 
 // YAML frontmatter key to check for publishing.
 // Notes with 'dr-publish: true' will be synced.
