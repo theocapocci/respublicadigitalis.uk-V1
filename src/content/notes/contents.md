@@ -1,6 +1,6 @@
 ---
 title: Contents
-dg-publish: true
+dg-publish: false
 dr-publish: true
 ---
 
