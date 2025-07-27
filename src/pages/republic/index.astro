@@ -1,0 +1,64 @@
+---
+// src/pages/republic/index.astro
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+const allNotes = await getCollection('notes');
+const publishedNotes = allNotes.filter(note => note.data['dr-publish'] === true);
+---
+<ContentLayout frontmatter={{ title: 'The Republic' }}>
+  <div class="gallery-grid">
+    {publishedNotes.map(note => (
+      // UPDATED: The link now points to the new URL structure
+      <a href={`/republic/${note.slug}`} class="gallery-item">
+        <div class="card">
+          <h3 class="card-title">{note.data.title}</h3>
+          <p class="card-excerpt">
+            An exploration of ideas. Click to read more.
+          </p>
+        </div>
+      </a>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  /* Styles remain the same */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .gallery-item {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  .gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  }
+  .card {
+    background-color: #ffffff;
+    border: 1px solid #E8E5DF;
+    border-radius: 4px;
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #3A3A3A;
+  }
+  .card-excerpt {
+    font-family: 'Sorts Mill Goudy', serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin: 0;
+  }
+</style>
