@@ -13,9 +13,7 @@ const publishedNotes = allNotes.filter(note => note.data['dr-publish'] === true)
       <a href={`/republic/${note.slug}`} class="gallery-item">
         <div class="card">
           <h3 class="card-title">{note.data.title}</h3>
-          <p class="card-excerpt">
-            An exploration of ideas. Click to read more.
-          </p>
+          <p class="card-excerpt">{note.data.desc}</p>
         </div>
       </a>
     ))}
