@@ -6,7 +6,7 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 const allNotes = await getCollection('notes');
 const publishedNotes = allNotes.filter(note => note.data['dr-publish'] === true);
 ---
-<ContentLayout frontmatter={{ title: 'The Republic' }}>
+<ContentLayout frontmatter={{ title: '...' }}>
   <div class="gallery-grid">
     {publishedNotes.map(note => (
       // UPDATED: The link now points to the new URL structure

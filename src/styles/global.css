@@ -128,3 +128,75 @@ body {
 .prose h1 { font-size: 2.8rem; opacity: 0.65; }
 .prose h2 { font-size: 2.2rem; opacity: 0.5; }
 .prose h3 { font-size: 1.8rem; opacity: 0.5; }
+
+
+
+/*
+ * =========================================
+ * 3. SHARED COMPONENT STYLES
+ * =========================================
+*/
+
+/* Shared Banner Styles */
+.banner {
+    color: #3A3A3A;
+    padding: 40px 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0px;
+    box-shadow: none;
+    position: relative;
+    border-bottom: 1px solid #E8E5DF;
+}
+.banner-title-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+}
+.banner h2 {
+    font-family: 'Cormorant SC', serif;
+    font-size: 3.0em;
+    margin: 0;
+    color: #526269;
+    line-height: 0.9;
+}
+.banner a.dropdown-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #6F8A9B;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    z-index: 2;
+}
+.banner a.dropdown-link:hover {
+    color: #4A6D7C;
+    text-decoration: underline;
+    transform: none;
+}
+.dropdown-link svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+/* Shared Footer Styles */
+footer {
+    max-width: 850px;
+    margin: 30px auto 0;
+    padding: 20px;
+    border-top: 1px solid #E8E5DF;
+    text-align: center;
+    color: #3A3A3A;
+    font-size: 0.9em;
+}
