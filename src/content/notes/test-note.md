@@ -1,5 +1,6 @@
 ---
 title: Test note
+desc: This is a test note
 dg-publish: false
 dr-publish: true
 ---
