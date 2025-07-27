@@ -4,12 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout frontmatter={{ title: 'Respublica Digitalis - Home' }}>
-  <div class="main-content-container">
+  <div class="homepage-content-container">
     <section class="homepage-content">
       <p>The point of this site is to provide a space for me to make my learning public.</p>
       <p>It is a riff on the idea of a <a href="https://maggieappleton.com/garden-history">digital garden.</a></p>
       <div style="height: var(--space-2xl)"></div>
-      <h1><b><em>Respublica Digitalis.</em></b> <span style="font-weight: normal; font-style: normal; font-size: 1.6rem;">(<em>Lit.</em> digital public thing)</span></h1>
       <ul>
         <li><a href="/republic/test-note" class="text-blue-600 hover:underline">Note!</a></li>
         <li><a href="/notes/example-note-2" class="text-blue-600 hover:underline">Example Note 2 Title</a></li>
@@ -20,7 +19,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <style>
   /* Local styles UNIQUE to index.astro */
-  .main-content-container {
+  .homepage-content-container {
     max-width: 1200px; /* */
     margin: 0 auto; /* */
     padding: 20px; /* */

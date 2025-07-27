@@ -15,12 +15,31 @@ const pageTitle = frontmatter?.title || 'Respublica Digitalis';
 <body>
     <header class="banner">
         <div class="banner-title-wrapper">
-            <h2>Digital<br />Republic</h2>
+            <a href="/">
+                <h2>DR</h2>
+            </a>
         </div>
-        <a href="/republic/" class="dropdown-link">
-            Explore Notes
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
-        </a>
+        {/* Container for navigation links */}
+        <nav class="main-nav">
+            {/* The dropdown container */}
+            <div class="dropdown">
+                {/* Main link for the dropdown section */}
+                <a href="/republic/" class="link">The Republic</a>
+                
+                {/* The button that will toggle the dropdown menu */}
+                <button class="dropdown-toggle" aria-label="Open menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+
+                {/* The dropdown menu itself, hidden by default */}
+                <ul class="dropdown-menu">
+                    <li><a href="/library/">Library</a></li>
+                </ul>
+            </div>
+            
+            {/* Other navigation links */}
+            <a href="/about/" class="link">About</a>
+        </nav>
     </header>
 
     <slot />
@@ -28,5 +47,44 @@ const pageTitle = frontmatter?.title || 'Respublica Digitalis';
     <footer>
         <p>&copy; 2025 Respublica Digitalis</p>
     </footer>
+
+    <script>
+        // Select all dropdown toggle buttons
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', (event) => {
+                // Stop the click from bubbling up to the document
+                event.stopPropagation(); 
+                
+                const dropdown = toggle.closest('.dropdown');
+                if (dropdown) {
+                    const isOpen = dropdown.classList.contains('is-open');
+                    
+                    // First, close any other dropdowns that might be open
+                    document.querySelectorAll('.dropdown.is-open').forEach(d => {
+                        d.classList.remove('is-open');
+                    });
+                    
+                    // If the current dropdown was not already open, open it.
+                    if (!isOpen) {
+                        dropdown.classList.add('is-open');
+                    }
+                }
+            });
+        });
+
+        // Add a click listener to the whole document to close the dropdown
+        // when the user clicks anywhere else on the page.
+        document.addEventListener('click', (event) => {
+            const openDropdown = document.querySelector('.dropdown.is-open');
+            // If there is an open dropdown and the click was outside of it...
+            // FIX: Cast event.target to Node to satisfy TypeScript
+            if (openDropdown && !openDropdown.contains(event.target as Node)) {
+                // ...then close it.
+                openDropdown.classList.remove('is-open');
+            }
+        });
+    </script>
 </body>
 </html>
