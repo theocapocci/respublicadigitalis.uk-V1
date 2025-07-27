@@ -1,7 +1,8 @@
 ---
 title: Test note
 desc: This is a test note
-dg-publish: false
+tags:
+  - tag1
 dr-publish: true
 ---
 
