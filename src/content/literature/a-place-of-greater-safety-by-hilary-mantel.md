@@ -1,5 +1,5 @@
 ---
-title: book
+title: 'A Place of Greater Safety, by Hilary Mantel'
 description: Description.
 image: /assets/a-place-of-greater-safetyjpg
 tags: null
