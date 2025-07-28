@@ -4,18 +4,10 @@ import path from 'path';
 import matter from 'gray-matter';
 import slugify from 'slugify';
 
-// --- Configuration ---
-
-// File: scripts/sync-obsidian.js
-
-import fs from 'fs-extra';
-import path from 'path';
-import matter from 'gray-matter';
-import slugify from 'slugify';
 
 // --- Configuration ---
 // The script runs from the website root, so '.' is the website path.
-const WEBSITE_PATH = '.'; 
+const WEBSITE_PATH = '.';
 // The vault path is passed in by the GitHub Action.
 const VAULT_PATH = process.env.VAULT_PATH;
 
@@ -32,11 +24,15 @@ const syncConfigs = [
         name: 'Literature Notes',
         obsidianDir: path.join(VAULT_PATH, 'literature'),
         astroDir: path.join(WEBSITE_PATH, 'src/content/literature'),
+        // --- FIX 1: Added linkPrefix for correct URL generation ---
+        linkPrefix: '/literature/',
     },
     {
         name: 'General Notes',
         obsidianDir: path.join(VAULT_PATH, 'notes'),
         astroDir: path.join(WEBSITE_PATH, 'src/content/notes'),
+        // --- FIX 1: Added linkPrefix for correct URL generation ---
+        linkPrefix: '/notes/',
     }
 ];
 
@@ -80,13 +76,13 @@ async function syncContent() {
         }
 
         console.log('\n--- Pass 2: Processing and writing notes ---');
-        // ... (The rest of the script remains the same)
 
         for (const note of allPublishedNotes) {
             let transformedContent = note.content;
             if (note.data.image) {
                 const imageName = path.basename(note.data.image);
-                await copyAsset(imageName, OBSIDIAN_VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH);
+                // --- FIX 2: Corrected variable from OBSIDIAN_VAULT_PATH to VAULT_PATH ---
+                await copyAsset(imageName, VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH);
                 const assetSlug = slugify(imageName, { lower: true, strict: true });
                 note.data.image = `/assets/${assetSlug}`;
             }
@@ -100,7 +96,8 @@ async function syncContent() {
             const assetRegex = /!\[\[([^\]]+)\]\]/g;
             const assetPromises = [];
             transformedContent.replace(assetRegex, (match, assetName) => {
-                assetPromises.push(copyAsset(assetName.trim(), OBSIDIAN_VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH));
+                // --- FIX 2: Corrected variable from OBSIDIAN_VAULT_PATH to VAULT_PATH ---
+                assetPromises.push(copyAsset(assetName.trim(), VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH));
                 return match;
             });
             await Promise.all(assetPromises);
