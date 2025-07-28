@@ -27,13 +27,13 @@ const PUBLISH_FRONTMATTER_KEY = 'dr-publish';
 const syncConfigs = [
     {
         name: 'Literature Notes',
-        obsidianDir: path.join(OBSIDIAN_VAULT_PATH, 'Literature'), // IMPORTANT: Assumes your literature notes are in a "Literature" subfolder in your vault.
+        obsidianDir: path.join(OBSIDIAN_VAULT_PATH, 'literature'), // IMPORTANT: Assumes your literature notes are in a "Literature" subfolder in your vault.
         astroDir: path.resolve('./src/content/literature'),
         linkPrefix: '/literature/'
     },
     {
         name: 'General Notes',
-        obsidianDir: path.join(OBSIDIAN_VAULT_PATH, 'Notes'), // Example: Assumes general notes are in a "Notes" subfolder.
+        obsidianDir: path.join(OBSIDIAN_VAULT_PATH, 'notes'), // Example: Assumes general notes are in a "Notes" subfolder.
         astroDir: path.resolve('./src/content/notes'),
         linkPrefix: '/notes/'
     }
