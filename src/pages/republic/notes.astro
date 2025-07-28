@@ -6,11 +6,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const allNotes = await getCollection('notes');
 const publishedNotes = allNotes.filter(note => note.data['dr-publish'] === true);
 ---
-<BaseLayout frontmatter={{ title: 'The Republic | Respublica Digitalis' }}>
+<BaseLayout frontmatter={{ title: 'Notes | Respublica Digitalis' }}>
   <div class="content-container">
     <section class="content">
-    <p>Here are some of my recent notes.</p>
+    <p>Here is a collection of notes.</p>
     </section> 
+    <div class="gallery-grid">
+      {publishedNotes.map(note => (
+        <a href={`/republic/${note.slug}`} class="gallery-item">
+          <div class="card">
+            <h3 class="card-title">{note.data.title}</h3>
+            <p class="card-excerpt">{note.data.desc}</p>
+          </div>
+        </a>
+      ))}
+    </div>
   </div>
 </BaseLayout>
 
