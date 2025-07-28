@@ -8,3 +8,9 @@ Create library
     Please help me to create a webpage for my site which is a library. I have an obsidian valut which has a markdown file for each book. The title of the file is the book's citekey in zotero. The first step is to import these markdown files for the books into my website repository. We have done a similar thing already for my notes. The current workflow is to use the yaml frontmatter property dr-publish (true/false) in obsidian. If true, then file is sent to my website repository
     
      Please draw inspiration from https://maggieappleton.com/library. 
+
+
+
+Send books to folder
+
+    Please help me to sync my literature notes from my obsidian vault to my website. This should make use of sync-obsidian.js, which works in conjunction with a git action to push from my vault repo to my website repo. My books should be in the folder src/content/literature instead of src/content/notes. 
