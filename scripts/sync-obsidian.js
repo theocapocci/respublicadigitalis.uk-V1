@@ -59,7 +59,7 @@ async function syncContent() {
 
                 if (data[PUBLISH_FRONTMATTER_KEY] === true) {
                     const fileName = path.basename(filePath, '.md');
-                    const slug = slugify(fileName, { lower: true, strict: true });
+                    const slug = slugify(data.title, { lower: true, strict: true });
 
                     allPublishedNotes.push({
                         filePath,
