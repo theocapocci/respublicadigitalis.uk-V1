@@ -1,7 +1,8 @@
 ---
-// src/pages/library/index.astro
+// src/pages/library.astro
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import path from 'node:path';
 
 // 1. Fetch all literature notes
 const allLiterature = await getCollection('literature');
@@ -22,7 +23,11 @@ const publishedLiterature = allLiterature
       {publishedLiterature.map(note => (
         <a href={`/literature/${note.slug}`} class="gallery-item">
           {note.data.image && (
-            <img src={note.data.image} alt={`Cover for ${note.data.title}`} class="card-image" />
+            <img 
+              src={`/assets/images/${path.basename(note.data.image)}`} 
+              alt={`Cover for ${note.data.title}`} 
+              class="card-image" 
+            />
           )}
         </a>
       ))}
