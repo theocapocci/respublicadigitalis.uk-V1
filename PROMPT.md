@@ -14,3 +14,8 @@ Create library
 Send books to folder
 
     Please help me to sync my literature notes from my obsidian vault to my website. This should make use of sync-obsidian.js, which works in conjunction with a git action to push from my vault repo to my website repo. My books should be in the folder src/content/literature instead of src/content/notes. 
+
+
+Other 
+
+    Okay. Now that we have the literature notes in my website repo, let's begin creating the library webpage. When I publish a literature note, this should add to a library gallery organized in chronological order. 

@@ -1,17 +1,26 @@
 // src/content/config.ts
 import { defineCollection, z } from 'astro:content';
 
-// Define the 'notes' content collection
-const notes = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    desc: z.string(), // 1. ADD THIS LINE: Makes 'desc' a required string.
-    tags: z.array(z.string()).optional(),
-    // Use 'dr-publish' in the TypeScript schema for the 'dr-publish' frontmatter key
-    'dr-publish': z.boolean(), // 2. CHANGED: Made this required by removing .optional().
-    // Add any other frontmatter fields you use in Obsidian
-  }),
+const notesSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  image: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  publish: z.boolean(),
+  date: z.date(),
+  uid: z.string().optional(),
 });
 
-export const collections = { notes }; // Export the 'notes' collection
+const literatureSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  image: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  publish: z.boolean(),
+  date: z.date(),
+});
+
+export const collections = {
+  'notes': defineCollection({ schema: notesSchema }),
+  'literature': defineCollection({ schema: literatureSchema }),
+};
