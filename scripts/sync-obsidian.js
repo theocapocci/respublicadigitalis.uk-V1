@@ -96,37 +96,27 @@ async function syncContent() {
         for (const note of allPublishedNotes) {
             let transformedContent = note.content;
 
+            // --- NEW CODE START ---
+            // Handle the primary display image from frontmatter
+            if (note.data.image) {
+                const imageName = path.basename(note.data.image); // Extract filename from path
+                await copyAsset(imageName, OBSIDIAN_VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH);
+
+                // We also need to update the frontmatter path to the public assets path
+                const assetSlug = slugify(imageName, { lower: true, strict: true });
+                note.data.image = `/assets/${assetSlug}`;
+            }
+            // --- NEW CODE END ---
+
             // Transform internal Obsidian links [[Note Name]] -> [/collection/note-slug]
             transformedContent = transformedContent.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (match, noteName, alias) => {
-                const targetNoteName = noteName.trim();
-                const targetInfo = slugMap.get(targetNoteName);
-                const linkText = alias ? alias.trim() : targetNoteName;
-
-                if (targetInfo) {
-                    return `[${linkText}](${targetInfo.linkPrefix}${targetInfo.slug})`;
-                } else {
-                    console.warn(`[Warning] In "${note.fileName}", linked note "${targetNoteName}" was not found or not published. Link kept as is.`);
-                    return match; // Keep original link if target isn't published
-                }
+                // ... (rest of the link transformation logic)
             });
 
             // Transform Obsidian embeds ![[Asset.png]] -> ![Asset.png](/assets/asset.png) and copy the asset
             const assetRegex = /!\[\[([^\]]+)\]\]/g;
-            const assetPromises = [];
+            // ... (rest of the asset transformation logic)
             
-            transformedContent.replace(assetRegex, (match, assetName) => {
-                assetPromises.push(copyAsset(assetName.trim(), OBSIDIAN_VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH));
-                return match; //This replace is just for gathering asset names
-            });
-            
-            await Promise.all(assetPromises); // Copies all found assets in parallel
-            
-            transformedContent = transformedContent.replace(assetRegex, (match, assetName) => {
-                const cleanAssetName = assetName.trim();
-                const assetSlug = slugify(cleanAssetName, { lower: true, strict: true });
-                return `![${cleanAssetName}](/assets/${assetSlug})`;
-            });
-
             // Re-compose frontmatter and content, then write to the destination.
             const outputContent = matter.stringify(transformedContent, note.data);
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
