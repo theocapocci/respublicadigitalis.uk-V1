@@ -1,5 +1,5 @@
 ---
-title: Test Literature Notes
+title: Test Literature Note
 desc: null
 tags: null
 dr-publish: true
