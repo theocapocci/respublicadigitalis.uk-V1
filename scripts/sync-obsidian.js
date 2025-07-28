@@ -6,14 +6,22 @@ import slugify from 'slugify';
 
 // --- Configuration ---
 
-// The script runs from the vault root, so '.' is the vault path.
-const VAULT_PATH = '.'; 
-// The website path is passed in by the GitHub Action.
-const WEBSITE_PATH = process.env.WEBSITE_PATH;
+// File: scripts/sync-obsidian.js
 
-// If the WEBSITE_PATH is not provided, the script cannot run.
-if (!WEBSITE_PATH) {
-    console.error("Error: WEBSITE_PATH environment variable not set.");
+import fs from 'fs-extra';
+import path from 'path';
+import matter from 'gray-matter';
+import slugify from 'slugify';
+
+// --- Configuration ---
+// The script runs from the website root, so '.' is the website path.
+const WEBSITE_PATH = '.'; 
+// The vault path is passed in by the GitHub Action.
+const VAULT_PATH = process.env.VAULT_PATH;
+
+// If the VAULT_PATH is not provided, the script cannot run.
+if (!VAULT_PATH) {
+    console.error("Fatal: VAULT_PATH environment variable not set. This script requires it to find your notes.");
     process.exit(1);
 }
 
@@ -34,7 +42,6 @@ const syncConfigs = [
 
 console.log(`Syncing from Vault: ${VAULT_PATH}`);
 console.log(`Syncing to Website: ${WEBSITE_PATH}`);
-
 
 async function syncContent() {
     try {
