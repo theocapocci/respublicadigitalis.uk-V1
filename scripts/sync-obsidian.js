@@ -1,193 +1,147 @@
 // scripts/sync-obsidian.js
-
 import fs from 'fs-extra';
 import path from 'path';
 import matter from 'gray-matter';
 import slugify from 'slugify';
 
-// --- Main Configuration ---
-const OBSIDIAN_VAULT_PATH = process.env.OBSIDIAN_VAULT_PATH || 'C:/Users/theob/Documents/Obsidian/obsidian-vault';
-const ASTRO_PUBLIC_ASSETS_PATH = path.resolve('./public/assets'); // Destination for images and other assets
+// --- Configuration ---
 
-// YAML frontmatter key to check for publishing.
-// Notes with 'dr-publish: true' will be synced.
-const PUBLISH_FRONTMATTER_KEY = 'dr-publish';
+// The script runs from the vault root, so '.' is the vault path.
+const VAULT_PATH = '.'; 
+// The website path is passed in by the GitHub Action.
+const WEBSITE_PATH = process.env.WEBSITE_PATH;
 
-/**
- * --- Sync Configurations ---
- */
+// If the WEBSITE_PATH is not provided, the script cannot run.
+if (!WEBSITE_PATH) {
+    console.error("Error: WEBSITE_PATH environment variable not set.");
+    process.exit(1);
+}
+
+const ASTRO_PUBLIC_ASSETS_PATH = path.join(WEBSITE_PATH, 'public/assets');
+
 const syncConfigs = [
     {
         name: 'Literature Notes',
-        obsidianDir: path.join(OBSIDIAN_VAULT_PATH, 'literature'), // Assumes notes are in a "literature" subfolder.
-        astroDir: path.resolve('./src/content/literature'),
-        linkPrefix: '/literature/'
+        obsidianDir: path.join(VAULT_PATH, 'literature'),
+        astroDir: path.join(WEBSITE_PATH, 'src/content/literature'),
     },
     {
         name: 'General Notes',
-        obsidianDir: path.join(OBSIDIAN_VAULT_PATH, 'notes'), // Assumes general notes are in a "notes" subfolder.
-        astroDir: path.resolve('./src/content/notes'),
-        linkPrefix: '/notes/'
+        obsidianDir: path.join(VAULT_PATH, 'notes'),
+        astroDir: path.join(WEBSITE_PATH, 'src/content/notes'),
     }
 ];
 
-console.log('Starting Obsidian Digital Republic sync...');
-console.log(`Obsidian Vault: ${OBSIDIAN_VAULT_PATH}`);
+console.log(`Syncing from Vault: ${VAULT_PATH}`);
+console.log(`Syncing to Website: ${WEBSITE_PATH}`);
 
-/**
- * The main synchronization function.
- */
+
 async function syncContent() {
     try {
         const allPublishedNotes = [];
         const slugMap = new Map();
 
-        // --- First Pass: Collect all publishable notes from all configurations ---
-        console.log('--- Pass 1: Identifying all notes for publication ---');
+        console.log('\n--- Pass 1: Identifying notes for publication ---');
         for (const config of syncConfigs) {
-            console.log(`Searching for notes in: ${config.name}`);
-
             await fs.emptyDir(config.astroDir);
-            console.log(`Cleaned destination directory: ${config.astroDir}`);
-
             const obsidianFiles = await getMarkdownFiles(config.obsidianDir);
-            console.log(`Found ${obsidianFiles.length} markdown files in ${config.obsidianDir}`);
+            console.log(`\nFound ${obsidianFiles.length} markdown files in ${config.name}.`);
 
             for (const filePath of obsidianFiles) {
+                const fileName = path.basename(filePath);
                 const fileContent = await fs.readFile(filePath, 'utf8');
                 const { data, content } = matter(fileContent);
 
-                if (data[PUBLISH_FRONTMATTER_KEY] === true) {
-                    const fileName = path.basename(filePath, '.md');
+                // **DIAGNOSTIC LOGGING**
+                console.log(`\n--- Checking: ${fileName}`);
+                console.log('Parsed frontmatter:', data);
+
+                if (data.publish && data.title) {
+                    console.log(`✅ Condition MET. Staging for publication.`);
                     const slug = slugify(data.title, { lower: true, strict: true });
-
-                    allPublishedNotes.push({
-                        filePath,
-                        fileName,
-                        slug,
-                        data,
-                        content,
-                        config,
-                    });
-
-                    slugMap.set(fileName, { slug, linkPrefix: config.linkPrefix });
+                    allPublishedNotes.push({ filePath, fileName: path.basename(filePath, '.md'), slug, data, content, config });
+                    slugMap.set(path.basename(filePath, '.md'), { slug, linkPrefix: config.linkPrefix });
+                } else {
+                    console.log(`❌ Condition FAILED. Skipping file.`);
                 }
             }
         }
-        console.log(`Identified ${allPublishedNotes.length} total notes for publication.`);
 
-        // --- Second Pass: Process notes, transform links, and copy assets ---
-        console.log('\n--- Pass 2: Processing notes and transforming links ---');
-        await fs.ensureDir(ASTRO_PUBLIC_ASSETS_PATH);
+        console.log(`\n--- Pass 1 Complete: Identified ${allPublishedNotes.length} total notes for publication. ---`);
+        if (allPublishedNotes.length === 0) {
+            console.warn("\nWarning: No notes were published. Check the logs above to see why files were skipped.");
+        }
+
+        console.log('\n--- Pass 2: Processing and writing notes ---');
+        // ... (The rest of the script remains the same)
 
         for (const note of allPublishedNotes) {
             let transformedContent = note.content;
-
-            // Handle the primary display image from frontmatter
             if (note.data.image) {
                 const imageName = path.basename(note.data.image);
                 await copyAsset(imageName, OBSIDIAN_VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH);
                 const assetSlug = slugify(imageName, { lower: true, strict: true });
                 note.data.image = `/assets/${assetSlug}`;
             }
-
-            // Transform internal Obsidian links [[Note Name]] -> [/collection/note-slug]
             transformedContent = transformedContent.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (match, noteName, alias) => {
                 const targetNoteName = noteName.trim();
                 const targetInfo = slugMap.get(targetNoteName);
                 const linkText = alias ? alias.trim() : targetNoteName;
-
-                if (targetInfo) {
-                    return `[${linkText}](${targetInfo.linkPrefix}${targetInfo.slug})`;
-                } else {
-                    console.warn(`[Warning] In "${note.fileName}", linked note "${targetNoteName}" was not found or not published. Link kept as is.`);
-                    return match;
-                }
+                if (targetInfo) return `[${linkText}](${targetInfo.linkPrefix}${targetInfo.slug})`;
+                return match;
             });
-
-            // Transform Obsidian embeds ![[Asset.png]] -> ![Asset.png](/assets/asset.png) and copy the asset
             const assetRegex = /!\[\[([^\]]+)\]\]/g;
             const assetPromises = [];
-            
             transformedContent.replace(assetRegex, (match, assetName) => {
                 assetPromises.push(copyAsset(assetName.trim(), OBSIDIAN_VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH));
                 return match;
             });
-            
             await Promise.all(assetPromises);
-            
             transformedContent = transformedContent.replace(assetRegex, (match, assetName) => {
                 const cleanAssetName = assetName.trim();
                 const assetSlug = slugify(cleanAssetName, { lower: true, strict: true });
                 return `![${cleanAssetName}](/assets/${assetSlug})`;
             });
-
-            // Re-compose frontmatter and content, then write to the destination.
             const outputContent = matter.stringify(transformedContent, note.data);
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
-
             await fs.writeFile(outputPath, outputContent, 'utf8');
             console.log(`Published: ${note.fileName} -> ${path.relative(process.cwd(), outputPath)}`);
         }
-
-        console.log('\nObsidian Digital Republic sync completed successfully!');
-
+        console.log('\nSync completed successfully!');
     } catch (error) {
-        console.error('Error during Obsidian Digital Republic sync:', error);
+        console.error('Error during sync:', error);
         process.exit(1);
     }
 }
 
-/**
- * Recursively finds all markdown files in a given directory, skipping hidden ones.
- */
 async function getMarkdownFiles(dir) {
-    if (!await fs.pathExists(dir)) {
-        console.warn(`[Warning] Directory not found: ${dir}. Skipping.`);
-        return [];
-    }
-    let markdownFiles = [];
-    const items = await fs.readdir(dir, { withFileTypes: true });
-
-    for (const item of items) {
+    if (!await fs.pathExists(dir)) return [];
+    let files = [];
+    for (const item of await fs.readdir(dir, { withFileTypes: true })) {
         const fullPath = path.join(dir, item.name);
         if (item.isDirectory()) {
             if (item.name.startsWith('.')) continue;
-            markdownFiles = markdownFiles.concat(await getMarkdownFiles(fullPath));
+            files = files.concat(await getMarkdownFiles(fullPath));
         } else if (item.isFile() && item.name.endsWith('.md')) {
-            markdownFiles.push(fullPath);
+            files.push(fullPath);
         }
     }
-    return markdownFiles;
+    return files;
 }
 
-/**
- * Finds an asset anywhere in the vault, copies it to the Astro assets folder, and slugs the name.
- */
 async function copyAsset(assetName, vaultPath, astroAssetsPath) {
-    try {
-        const sourcePath = await findFile(assetName, vaultPath);
-        if (sourcePath) {
-            const assetSlug = slugify(assetName, { lower: true, strict: true });
-            const destinationPath = path.join( astroAssetsPath, assetSlug);
-            await fs.copy(sourcePath, destinationPath);
-        } else {
-            console.warn(`[Warning] Asset "${assetName}" not found in vault. It will not be copied.`);
-        }
-    } catch (error) {
-        console.error(`[Error] Failed to copy asset "${assetName}":`, error);
+    const sourcePath = await findFile(assetName, vaultPath);
+    if (sourcePath) {
+        const assetSlug = slugify(assetName, { lower: true, strict: true });
+        const destinationPath = path.join(astroAssetsPath, assetSlug);
+        if (!await fs.pathExists(destinationPath)) await fs.copy(sourcePath, destinationPath);
     }
 }
 
-// --- Utility to find a file by name recursively ---
 const fileCache = new Map();
 async function findFile(fileName, dir) {
-    if (fileCache.has(fileName)) {
-        return fileCache.get(fileName);
-    }
-
-    const items = await fs.readdir(dir, { withFileTypes: true });
-    for (const item of items) {
+    if (fileCache.has(fileName)) return fileCache.get(fileName);
+    for (const item of await fs.readdir(dir, { withFileTypes: true })) {
         const fullPath = path.join(dir, item.name);
         if (item.isDirectory()) {
             if (item.name.startsWith('.')) continue;
@@ -204,5 +158,4 @@ async function findFile(fileName, dir) {
     return null;
 }
 
-// Run the sync function when the script is executed.
 syncContent();
