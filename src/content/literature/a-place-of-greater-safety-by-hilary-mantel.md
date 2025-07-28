@@ -1,6 +1,6 @@
 ---
 title: 'A Place of Greater Safety, by Hilary Mantel'
-description: test
+description: null
 image: /assets/mantelplacegreatersafety1993jpg
 tags: null
 publish: true
