@@ -1,5 +1,5 @@
 ---
-title: debt
+title: The Debt
 publish: true
 ---
 
