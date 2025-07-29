@@ -120,13 +120,24 @@ async function syncContent() {
                 return `![${cleanAssetName}](../../images/notes/${assetSlug})`;
             });
             
-            console.log(`Stringifying data for ${note.slug}:`, note.data); 
+            // ### START of MODIFICATION ###
+            // The `gray-matter` library translates empty YAML fields (e.g., "description:")
+            // into `null` values in the data object. To prevent it from writing "description: null"
+            // in the output, we must clean the data object before stringifying it.
 
-            const outputContent = matter.stringify(transformedContent, note.data, {
-                styles: {
-                    '!!null': ''
+            // 1. Create a new, clean data object.
+            const cleanedData = {};
+            for (const key in note.data) {
+                // 2. Copy a value only if it is not null.
+                if (note.data[key] !== null) {
+                    cleanedData[key] = note.data[key];
                 }
-            });
+            }
+
+            // 3. Stringify the content using the cleaned data object.
+            const outputContent = matter.stringify(transformedContent, cleanedData);
+            // ### END of MODIFICATION ###
+
 
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
             await fs.writeFile(outputPath, outputContent, 'utf8');
