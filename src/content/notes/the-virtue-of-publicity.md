@@ -1,5 +1,5 @@
 ---
-title: The Debt
+title: The Virtue of Publicity
 tags:
   - economics
 publish: true
