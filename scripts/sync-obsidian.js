@@ -13,7 +13,9 @@ if (!VAULT_PATH) {
     process.exit(1);
 }
 
-const ASTRO_PUBLIC_ASSETS_PATH = path.join(WEBSITE_PATH, 'public/assets');
+// --- ADDED: New paths for content-based images ---
+const ASTRO_BOOK_IMAGES_PATH = path.join(WEBSITE_PATH, 'src/content/images/books');
+const ASTRO_NOTE_IMAGES_PATH = path.join(WEBSITE_PATH, 'src/content/images/notes');
 
 // --- NEW HELPER FUNCTION ---
 // This correctly slugifies the filename while preserving the extension.
@@ -45,7 +47,6 @@ console.log(`Syncing to Website: ${WEBSITE_PATH}`);
 async function syncContent() {
     try {
         const noteConfigs = syncConfigs.filter(c => c.linkPrefix);
-        const assetConfigs = syncConfigs.filter(c => !c.linkPrefix);
         
         const allPublishedNotes = [];
         const slugMap = new Map();
@@ -83,13 +84,17 @@ async function syncContent() {
         console.log('\n--- Pass 2: Processing and writing notes ---');
         for (const note of allPublishedNotes) {
             let transformedContent = note.content;
+            
+            // --- CHANGED: Logic for handling frontmatter images ---
             if (note.data.image) {
                 const imageName = path.basename(note.data.image);
-                await copyAsset(imageName, VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH);
-                // --- FIX: Use the new helper function ---
+                // 1. Copy asset to the new 'books' image folder
+                await copyAsset(imageName, VAULT_PATH, ASTRO_BOOK_IMAGES_PATH);
                 const assetSlug = slugifyAsset(imageName);
-                note.data.image = assetSlug;
+                // 2. Update frontmatter to use a relative path
+                note.data.image = `../../images/books/${assetSlug}`;
             }
+
             transformedContent = transformedContent.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (match, noteName, alias) => {
                 const targetNoteName = noteName.trim();
                 const targetInfo = slugMap.get(targetNoteName);
@@ -97,19 +102,24 @@ async function syncContent() {
                 if (targetInfo) return `[${linkText}](${targetInfo.linkPrefix}${targetInfo.slug})`;
                 return match;
             });
+
+            // --- CHANGED: Logic for handling embedded images ---
             const assetRegex = /!\[\[([^\]]+)\]\]/g;
             const assetPromises = [];
             transformedContent.replace(assetRegex, (match, assetName) => {
-                assetPromises.push(copyAsset(assetName.trim(), VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH));
+                // 1. Copy asset to the new 'notes' image folder
+                assetPromises.push(copyAsset(assetName.trim(), VAULT_PATH, ASTRO_NOTE_IMAGES_PATH));
                 return match;
             });
             await Promise.all(assetPromises);
+
             transformedContent = transformedContent.replace(assetRegex, (match, assetName) => {
                 const cleanAssetName = assetName.trim();
-                // --- FIX: Use the new helper function ---
                 const assetSlug = slugifyAsset(cleanAssetName);
-                return `![${cleanAssetName}](/assets/${assetSlug})`;
+                // 2. Update the link to use a relative path
+                return `![${cleanAssetName}](../../images/notes/${assetSlug})`;
             });
+            
             const outputContent = matter.stringify(transformedContent, note.data);
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
             await fs.writeFile(outputPath, outputContent, 'utf8');
@@ -138,14 +148,16 @@ async function getMarkdownFiles(dir) {
     return files;
 }
 
-async function copyAsset(assetName, vaultPath, astroAssetsPath) {
+// --- CHANGED: The third argument 'destinationDir' is now used for specific destinations ---
+async function copyAsset(assetName, vaultPath, destinationDir) {
     const sourcePath = await findFile(assetName, vaultPath);
     if (sourcePath) {
-        // --- FIX: Use the new helper function ---
         const assetSlug = slugifyAsset(assetName);
-        const destinationPath = path.join(astroAssetsPath, assetSlug);
+        const destinationPath = path.join(destinationDir, assetSlug);
         if (!await fs.pathExists(destinationPath)) {
-             await fs.copy(sourcePath, destinationPath);
+            // Ensure the specific destination directory exists before copying
+            await fs.ensureDir(destinationDir);
+            await fs.copy(sourcePath, destinationPath);
         }
     } else {
         console.warn(`Warning: Could not find asset "${assetName}" anywhere in the vault.`);
