@@ -1,11 +1,11 @@
 ---
 title: debt
 description: null
-image: null
 tags: null
 publish: true
-date: null
 uid: null
+datePublished: null
+dateUpdated: null
 ---
 
 The note is about debt.
