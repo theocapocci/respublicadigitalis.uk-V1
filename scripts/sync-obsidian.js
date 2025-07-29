@@ -36,11 +36,6 @@ const syncConfigs = [
         obsidianDir: path.join(VAULT_PATH, 'notes'),
         astroDir: path.join(WEBSITE_PATH, 'src/content/notes'),
         linkPrefix: '/notes/',
-    },
-    {
-        name: 'Images',
-        obsidianDir: path.join(VAULT_PATH, 'assets/images'),
-        astroDir: path.join(WEBSITE_PATH, 'public/assets/images'),
     }
 ];
 
@@ -93,7 +88,7 @@ async function syncContent() {
                 await copyAsset(imageName, VAULT_PATH, ASTRO_PUBLIC_ASSETS_PATH);
                 // --- FIX: Use the new helper function ---
                 const assetSlug = slugifyAsset(imageName);
-                note.data.image = `/assets/${assetSlug}`;
+                note.data.image = assetSlug;
             }
             transformedContent = transformedContent.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (match, noteName, alias) => {
                 const targetNoteName = noteName.trim();
@@ -119,18 +114,6 @@ async function syncContent() {
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
             await fs.writeFile(outputPath, outputContent, 'utf8');
             console.log(`Published: ${note.fileName} -> ${path.relative(process.cwd(), outputPath)}`);
-        }
-
-        console.log('\n--- Pass 3: Syncing asset folders ---');
-        for (const config of assetConfigs) {
-            if (await fs.pathExists(config.obsidianDir)) {
-                console.log(`Syncing assets from ${config.obsidianDir}`);
-                await fs.ensureDir(config.astroDir);
-                await fs.copy(config.obsidianDir, config.astroDir, { overwrite: true });
-                console.log(`✅ Successfully synced ${config.name} to ${config.astroDir}`);
-            } else {
-                console.warn(`Warning: Asset directory not found, skipping. Path: ${config.obsidianDir}`);
-            }
         }
 
         console.log('\nSync completed successfully!');
