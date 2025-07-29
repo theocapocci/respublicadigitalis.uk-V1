@@ -1,5 +1,5 @@
 ---
-title: The party's interests come first
+title: The Party's Interests Come First
 author: Joseph Torigian
 cover: ../images/books/torigian2025.jpg
 publish: true
