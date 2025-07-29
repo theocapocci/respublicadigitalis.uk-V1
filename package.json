@@ -9,7 +9,6 @@
     "astro": "astro",
     "sync": "node scripts/sync-obsidian.js"
   },
-  
   "dependencies": {
     "astro": "^5.12.2",
     "fs-extra": "^11.3.0",
@@ -18,5 +17,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "overrides": {
+    "js-yaml": "4.1.0"
   }
 }
