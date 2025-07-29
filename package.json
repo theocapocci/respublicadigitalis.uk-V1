@@ -10,10 +10,12 @@
     "sync": "node scripts/sync-obsidian.js"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "astro": "^5.12.2",
     "fs-extra": "^11.3.0",
     "gray-matter": "^4.0.3",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
