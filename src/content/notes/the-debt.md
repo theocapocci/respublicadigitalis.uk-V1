@@ -1,7 +1,7 @@
 ---
 title: The Debt
 publish: true
-uid: '1'
+uid: test
 ---
 
 The note is about debt.
