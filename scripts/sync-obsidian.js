@@ -125,7 +125,7 @@ async function syncContent() {
             // to render `null` values as empty (e.g., "tags:") instead of "tags: null".
             const outputContent = matter.stringify(transformedContent, note.data, {
                 styles: {
-                    '!!null': ''
+                    '!!null': 'empty'
                 }
             });
             // ### END of MODIFICATION ###
