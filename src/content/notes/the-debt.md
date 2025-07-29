@@ -1,5 +1,5 @@
 ---
-title: The Debt
+title: the debt
 tags:
   - economics
 publish: true
