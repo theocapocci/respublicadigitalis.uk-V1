@@ -1,56 +1,131 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageWrapper from '../components/layouts/PageWrapper.astro';
+import NoteCard from '../components/cards/NoteCard.astro';
+import LiteratureCard from '../components/cards/LiteratureCard.astro';
+
+import { 
+  getHomepageTimeline, 
+  getRecentLibraryItems, 
+  getRecentNotes 
+} from '../lib/timeline';
+
+// --- FETCH DATA FOR EACH SECTION ---
+const timelineItems = await getHomepageTimeline(7);
+const libraryItems = await getRecentLibraryItems(8);
+const noteItems = await getRecentNotes(4);
 ---
 
-<BaseLayout frontmatter={{ title: 'Respublica Digitalis - Home' }}>
-  <div class="homepage-content-container">
-    <section class="homepage-content">
-      <p>The point of this site is to provide a space for me to make my learning public.</p>
-      <p>It is a riff on the idea of a <a href="https://maggieappleton.com/garden-history">digital garden.</a></p>
-      <div style="height: var(--space-2xl)"></div>
-      <ul>
-        <li><a href="/republic/test-note" class="text-blue-600 hover:underline">Note!</a></li>
-        <li><a href="/notes/example-note-2" class="text-blue-600 hover:underline">Example Note 2 Title</a></li>
-      </ul>
+<BaseLayout frontmatter={{ title: 'Home | Respublica Digitalis' }}>
+  <PageWrapper>
+
+    <!-- Welcome Section -->
+    <section class="hero">
+      <h1>Respublica Digitalis</h1>
+      <p class="subtitle">My notes, in public.</p>
     </section>
-  </div>
+
+    <!-- Main two-column container using CSS Grid -->
+    <div class="main-content-grid">
+      
+      <!-- Main Column (Notes) -->
+      <div class="main-column">
+        <section class="homepage-section">
+          <div class="section-header">
+            <h2>Latest Notes</h2>
+            <a href="/republic/notes" class="view-all-link">View all →</a>
+          </div>
+          <div class="gallery-grid-notes">
+            <!-- THIS IS THE FIX: All necessary props are now being passed -->
+            {noteItems.map(note => (
+              <NoteCard
+                slug={note.slug}
+                title={note.data.title}
+                description={note.data.description}
+                tags={note.data.tags}
+                uid={note.data.uid}
+                datePublished={note.data.datePublished}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar Column (Timeline) -->
+      <aside class="sidebar-column">
+        <section class="homepage-section">
+          <div class="section-header">
+            <h2>Recent Activity</h2>
+          </div>
+          <ul class="meta-timeline">
+            {timelineItems.map(item => (
+              <li>
+                <time>{new Date(item.sortDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</time>
+                <div class="activity-details">
+                  <span class={`badge ${item.type.toLowerCase()}`}>{item.type}</span>
+                  <a href={item.url}>{item.title}</a>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </aside>
+
+    </div>
+
+    <!-- Full-Width Library Section -->
+    <section class="homepage-section">
+      <div class="section-header">
+        <h2>From the Library</h2>
+        <a href="/republic/literature" class="view-all-link">View all →</a>
+      </div>
+      <div class="gallery-grid-literature">
+        <!-- THIS IS THE FIX: All necessary props are now being passed -->
+        {libraryItems.map(item => (
+          <LiteratureCard
+            slug={item.slug}
+            title={item.data.title}
+            cover={item.data.cover}
+          />
+        ))}
+      </div>
+    </section>
+
+  </PageWrapper>
 </BaseLayout>
 
 <style>
-  /* Local styles UNIQUE to index.astro */
-  .homepage-content-container {
-    max-width: 1200px; /* */
-    margin: 0 auto; /* */
-    padding: 20px; /* */
-  }
-
-  /* Homepage content styles */
-  .homepage-content {
-    padding: 20px 0; /* */
-    text-align: left; /* */
-    max-width: 1100px; /* */
-    margin: 0 auto; /* */
-  }
-  .homepage-content h1 {
-    font-family: 'Cormorant Garamond', serif; /* */
-    font-weight: 300; /* */
-    font-size: 3.2em; /* */
-    color: #3A3A3A; /* */
-    margin-bottom: 20px; /* */
-  }
-  .homepage-content p {
-    font-family: 'Sorts Mill Goudy', serif; /* */
-    font-size: 1.3em; /* */
-    line-height: 1.8; /* */
-    margin: 0 auto 30px auto; /* */
-  }
-  .homepage-content ul {
-    list-style: none; /* */
-    padding: 0; /* */
-  }
-  .homepage-content ul li a {
-    font-size: 1.3em; /* */
-    color: #6F8A9B; /* */
-  }
+/* All your existing, correct styles from the previous version are here */
+/* --- HERO SECTION --- */
+.hero { text-align: center; padding: 2rem 1rem; margin-bottom: 6rem; }
+.hero h1 { font-family: 'Cormorant SC', serif; font-size: 4rem; margin-bottom: 1rem; }
+.hero .subtitle { font-family: 'Sorts Mill Goudy', serif; font-size: 1.4rem; color: #555; max-width: 600px; margin: 0 auto; }
+/* --- CSS GRID LAYOUT --- */
+.main-content-grid { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; }
+.main-column {}
+.sidebar-column { border-left: 1px solid #E8E5DF; padding-left: 3rem; }
+/* --- HOMEPAGE SECTIONS --- */
+.homepage-section { margin-bottom: 4rem; }
+.section-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #E8E5DF; padding-bottom: 0.5rem; margin-bottom: 2rem; }
+.section-header h2 { font-family: 'Cormorant SC', serif; font-size: 2rem; margin: 0; }
+.view-all-link { font-family: 'Cormorant SC', sans-serif; font-size: 1.1rem; color: #5A9BD5; text-decoration: none; }
+/* --- METADATA TIMELINE (SIDEBAR) --- */
+.meta-timeline { list-style: none; padding: 0; }
+.meta-timeline li { display: flex; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid #f0f0f0; }
+.meta-timeline time { font-family: 'Cormorant Garamond', monospace; font-size: 0.9rem; color: #888; flex-shrink: 0; padding-top: 4px; }
+.activity-details { display: flex; flex-direction: column; gap: 0.25rem; }
+.meta-timeline .badge { font-size: 0.7rem; font-weight: bold; padding: 2px 7px; border-radius: 10px; color: white; align-self: flex-start; }
+.meta-timeline .badge.note { background-color: #5A9BD5; }
+.meta-timeline .badge.book { background-color: #70AD47; }
+.meta-timeline a { color: #333; text-decoration: none; font-size: 1rem; }
+.meta-timeline a:hover { text-decoration: underline; }
+/* --- GALLERY GRIDS --- */
+.gallery-grid-literature { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 2rem; }
+.gallery-grid-notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+/* --- RESPONSIVE STYLES --- */
+@media (max-width: 900px) {
+  .main-content-grid { grid-template-columns: 1fr; }
+  .sidebar-column { border-left: none; padding-left: 0; }
+}
 </style>

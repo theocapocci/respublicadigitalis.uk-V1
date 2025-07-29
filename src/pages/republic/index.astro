@@ -11,7 +11,7 @@ const timelineItems: TimelineItem[] = await getTimelineItems();
   <PageWrapper>
 
     <div class="timeline-header-container">
-      <h1>The Republic</h1>
+      <h1 style="color: #696969;">TIMELINE</h1>
       <p>A chronological timeline of published notes and readings.</p>
     </div>
 
@@ -61,17 +61,17 @@ const timelineItems: TimelineItem[] = await getTimelineItems();
 
 <style>
 /* --- HEADER STYLES --- */
-.timeline-header-container { max-width: 850px; margin: 0 auto; padding: 40px 20px 20px; text-align: center; border-bottom: 1px solid #E8E5DF; margin-bottom: 3rem; }
+.timeline-header-container { max-width: 850px; margin: 0 auto; padding: 10px 20px 20px; text-align: center; border-bottom: 1px solid #E8E5DF; margin-bottom: 3rem; }
 .timeline-header-container h1 { font-family: 'Cormorant SC', serif; font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
 .timeline-header-container p { font-family: 'Sorts Mill Goudy', serif; font-size: 1.3em; line-height: 1.8; }
 
 /* --- TIMELINE ITEM STYLES (FROM CONTENTLAYOUT) --- */
-.timeline-item { max-width: 850px; margin: 0 auto; padding: 40px 20px; }
-.timeline-item h1 { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.1; }
+.timeline-item { max-width: 850px; margin: 0 auto; padding: 0px 20px; }
+.timeline-item h1 { font-family: 'Cormorant SC', serif; font-size: 3.5rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.1; }
 
 /* --- NEW METADATA STYLES --- */
 .item-metadata { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
-.item-date { font-family: 'Courier New', monospace; color: #888; font-size: 0.9rem; }
+.item-date { font-family: 'Cormorant Garamond', monospace; color: #7a7979; font-size: 1.3rem; }
 .item-badge { font-family: 'Cormorant SC', serif; font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 12px; color: white; }
 .item-badge.note { background-color: #5A9BD5; }
 .item-badge.book { background-color: #70AD47; }
