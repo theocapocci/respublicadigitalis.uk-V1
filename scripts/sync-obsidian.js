@@ -120,11 +120,9 @@ async function syncContent() {
                 return `![${cleanAssetName}](../../images/notes/${assetSlug})`;
             });
             
-            console.log(`Stringifying data for ${note.slug}:`, note.data); // <-- ADD THIS LINE
-
             const outputContent = matter.stringify(transformedContent, note.data, {
                 styles: {
-                    '!!null': 'empty'
+                    '!!null': ''
                 }
             });
             // ### END of MODIFICATION ###
