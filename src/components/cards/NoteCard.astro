@@ -3,7 +3,7 @@
 import { Image } from 'astro:assets';
 
 // Define the props the component will receive from the parent page
-const { slug, title, cover, description } = Astro.props;
+const { slug, title, description, uid } = Astro.props;
 ---
 
 <a href={`/republic/notes/${slug}`} class="gallery-item">
@@ -12,17 +12,13 @@ const { slug, title, cover, description } = Astro.props;
       Here's the key: We check if 'cover' exists before rendering the <Image/> component.
       This prevents errors and handles notes that don't have a cover image.
     -->
-    {cover && (
-      <Image 
-        src={cover} 
-        alt={`Cover for ${title}`} 
-        class="card-image"
-        widths={[280, 560]}
-        sizes="(max-width: 600px) 280px, 560px"
-      />
-    )}
     <div class="card-content">
+      {uid && (
+        <p class="card-uid">{uid}</p>
+      )}
+
       <h3 class="card-title">{title}</h3>
+
       {description && (
         <p class="card-excerpt">{description}</p>
       )}
@@ -74,6 +70,16 @@ const { slug, title, cover, description } = Astro.props;
     font-weight: 600;
     margin: 0 0 1rem 0;
     color: #3A3A3A;
+  }
+
+    /* 3. Add styles for the new UID element */
+  .card-uid {
+    font-family: 'Courier New', monospace; /* Monospace font for an ID look */
+    font-size: 0.85rem;
+    color: #888; /* A muted grey color */
+    margin: 0 0 1rem 0; /* Space between uid and description */
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #E8E5DF; /* A subtle separator line */
   }
   
   .card-excerpt {

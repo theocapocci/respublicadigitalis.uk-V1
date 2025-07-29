@@ -1,82 +1,130 @@
 ---
 // src/pages/republic/index.astro
-import { getCollection } from 'astro:content';
+import { getTimelineItems, type TimelineItem } from '../../lib/timeline';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageWrapper from '../../components/layouts/PageWrapper.astro';
 
-const allNotes = await getCollection('notes');
-const publishedNotes = allNotes.filter(note => note.data['dr-publish'] === true);
+const timelineItems: TimelineItem[] = await getTimelineItems();
 ---
-<BaseLayout frontmatter={{ title: 'The Republic | Respublica Digitalis' }}>
-  <div class="content-container">
-    <section class="content">
-    <p>Here are some of my recent notes.</p>
-    </section> 
-  </div>
+
+<BaseLayout frontmatter={{ title: 'Republic | Respublica Digitalis' }}>
+  <PageWrapper>
+
+    <div class="timeline-header-container">
+      <h1>The Republic</h1>
+      <p>A chronological timeline of published notes and readings.</p>
+    </div>
+
+    <div class="timeline-feed">
+      {timelineItems.map((item, index) => {
+        const displayDate = new Date(item.sortDate).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric',
+        });
+
+        return (
+          <>
+            <main class="timeline-item">
+              <!-- METADATA HEADER -->
+              <div class="item-metadata">
+                <span class={`item-badge ${item.type.toLowerCase()}`}>{item.type}</span>
+                <time class="item-date">{displayDate}</time>
+              </div>
+
+              <!-- TITLE & SUBTITLE -->
+              <h1>{item.title}</h1>
+              {item.description && <p class="item-subtitle">{item.description}</p>}
+              
+              <!-- CONTENT BODY -->
+              <article class="prose">
+                <item.content />
+              </article>
+              
+              <!-- TAGS (FOOTER) -->
+              {item.tags && item.tags.length > 0 && (
+                <div class="item-tags-container">
+                  <span class="tags-label">Tagged:</span>
+                  {item.tags.map(tag => (
+                    <a href={`/tags/${tag}`} class="item-tag">{tag}</a>
+                  ))}
+                </div>
+              )}
+            </main>
+
+            {index < timelineItems.length - 1 && <hr class="timeline-divider" />}
+          </>
+        )
+      })}
+    </div>
+
+  </PageWrapper>
 </BaseLayout>
 
 <style>
-  /* --- PAGE-SPECIFIC LAYOUT AND CONTENT STYLES --- */
-  /* FIXED: Corrected selector from .maincontent-container */
-  .main-content-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+/* --- HEADER STYLES --- */
+.timeline-header-container { max-width: 850px; margin: 0 auto; padding: 40px 20px 20px; text-align: center; border-bottom: 1px solid #E8E5DF; margin-bottom: 3rem; }
+.timeline-header-container h1 { font-family: 'Cormorant SC', serif; font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+.timeline-header-container p { font-family: 'Sorts Mill Goudy', serif; font-size: 1.3em; line-height: 1.8; }
 
-  .base-content {
-    padding: 20px 0;
-    text-align: left;
-    max-width: 1100px; /* This will constrain the intro text */
-    margin: 0 auto;
-  }
- 
-  .base-content p {
-    font-family: 'Sorts Mill Goudy', serif;
-    font-size: 1.3em;
-    line-height: 1.8;
-    /* FIXED: Consolidated the margin property */
-    margin: 20px 0 30px 0;
-  }
+/* --- TIMELINE ITEM STYLES (FROM CONTENTLAYOUT) --- */
+.timeline-item { max-width: 850px; margin: 0 auto; padding: 40px 20px; }
+.timeline-item h1 { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.1; }
 
+/* --- NEW METADATA STYLES --- */
+.item-metadata { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+.item-date { font-family: 'Courier New', monospace; color: #888; font-size: 0.9rem; }
+.item-badge { font-family: 'Cormorant SC', serif; font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 12px; color: white; }
+.item-badge.note { background-color: #5A9BD5; }
+.item-badge.book { background-color: #70AD47; }
 
-  /* --- GALLERY STYLES --- */
-  .gallery-grid {
-    max-width: 1100px; /* Matched to base-content for alignment */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 0 auto;
-  }
-  .gallery-item {
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  }
-  .gallery-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-  }
-  .card {
-    background-color: #ffffff;
-    border: 1px solid #E8E5DF;
-    border-radius: 4px;
-    padding: 1.5rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-title {
-    font-family: 'Cormorant SC', serif;
-    font-size: 1.7rem;
-    font-weight: 600;
-    margin: 0 0 1rem 0;
-    color: #3A3A3A;
-  }
-  .card-excerpt {
-    font-family: 'Sorts Mill Goudy', serif;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #555;
-    margin: 0;
-  }
+.item-subtitle {
+  font-family: 'Sorts Mill Goudy', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: #666;
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+  line-height: 1.5;
+  border-left: 3px solid #E8E5DF;
+  padding-left: 1.5rem;
+}
+
+/* --- PROSE STYLES FOR CONTENT --- */
+.prose { font-family: 'Sorts Mill Goudy', serif; font-size: 1.15rem; line-height: 1.8; color: #333; }
+.prose :global(p) { margin-bottom: 1.25rem; }
+.prose :global(blockquote) { padding-left: 1rem; border-left: 3px solid #E8E5DF; margin-left: 0; font-style: italic; color: #555; }
+.prose :global(h2) { font-family: 'Cormorant SC', serif; font-size: 2rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+
+/* --- NEW TAGS STYLES --- */
+.item-tags-container {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.tags-label {
+  font-family: 'Cormorant SC', serif;
+  font-size: 0.9rem;
+  color: #888;
+}
+.item-tag {
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  background-color: #E8E5DF;
+  color: #555;
+  padding: 5px 12px;
+  border-radius: 15px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.item-tag:hover {
+  background-color: #5A9BD5;
+  color: white;
+}
+
+/* --- DIVIDER STYLE --- */
+.timeline-divider { max-width: 200px; margin: 3rem auto; border: 0; height: 1px; background-color: #ddd; }
 </style>

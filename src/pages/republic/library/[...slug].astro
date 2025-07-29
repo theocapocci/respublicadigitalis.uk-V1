@@ -33,9 +33,6 @@ const { Content } = await entry.render();
 <ContentLayout frontmatter={entry.data}>
   <!-- The <article> tag is semantic HTML for a self-contained piece of content. -->
   <article class="prose">
-
-    <!-- Optional but recommended: Display key data from the frontmatter at the top -->
-    <h1>{entry.data.title}</h1>
     
     <!-- Check if an author exists before trying to display it -->
     {entry.data.author && (
@@ -58,9 +55,9 @@ const { Content } = await entry.render();
     The .prose class scopes these styles to only this article.
   */
   .prose .author-info {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     color: #555;
-    text-align: center;
+    text-align: left;
     margin-top: -1rem;
     margin-bottom: 2rem;
   }
