@@ -120,12 +120,13 @@ async function syncContent() {
                 return `![${cleanAssetName}](../../images/notes/${assetSlug})`;
             });
             
+            console.log(`Stringifying data for ${note.slug}:`, note.data); 
+
             const outputContent = matter.stringify(transformedContent, note.data, {
                 styles: {
                     '!!null': ''
                 }
             });
-            // ### END of MODIFICATION ###
 
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
             await fs.writeFile(outputPath, outputContent, 'utf8');
