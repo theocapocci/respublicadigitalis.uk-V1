@@ -1,0 +1,76 @@
+---
+// File: src/pages/republic/literature/[slug].astro
+
+import { getCollection } from 'astro:content';
+// This path goes up three levels (literature -> republic -> pages) to find the layouts folder.
+import ContentLayout from '../../../layouts/ContentLayout.astro'; 
+
+// This function runs at build time to tell Astro what pages to create.
+export async function getStaticPaths() {
+  // 1. Get all entries from the 'literature' collection.
+  // 2. Filter them to only include entries with "publish: true" in the frontmatter.
+  const literatureEntries = await getCollection('literature', ({ data }) => {
+    return data.publish === true;
+  });
+
+  // 3. Create a page for each published entry.
+  return literatureEntries.map(entry => ({
+    params: { slug: entry.slug }, // The slug determines the URL (e.g., /republic/literature/slug-name)
+    props: { entry },            // Pass the full entry object to the page component below.
+  }));
+}
+
+// Get the specific 'entry' for the page being rendered.
+// Astro passes it in through props from getStaticPaths.
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<!-- 
+  Use your ContentLayout and pass the entire frontmatter object to it.
+  The layout can then use entry.data.title for the <title> tag, etc.
+-->
+<ContentLayout frontmatter={entry.data}>
+  <!-- The <article> tag is semantic HTML for a self-contained piece of content. -->
+  <article class="prose">
+
+    <!-- Optional but recommended: Display key data from the frontmatter at the top -->
+    <h1>{entry.data.title}</h1>
+    
+    <!-- Check if an author exists before trying to display it -->
+    {entry.data.author && (
+      <p class="author-info">
+        <em>By {entry.data.author}</em>
+      </p>
+    )}
+
+    <hr />
+
+    <!-- This <Content /> component renders the actual Markdown from your file. -->
+    <Content />
+
+  </article>
+</ContentLayout>
+
+<style is:global>
+  /* 
+    'is:global' allows us to style tags inside the Markdown content.
+    The .prose class scopes these styles to only this article.
+  */
+  .prose .author-info {
+    font-size: 1.1rem;
+    color: #555;
+    text-align: center;
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose hr {
+    margin-bottom: 2rem;
+  }
+
+  /* You can add more global styles here for h2, p, blockquote, etc. */
+  .prose p {
+    line-height: 1.7;
+  }
+</style>

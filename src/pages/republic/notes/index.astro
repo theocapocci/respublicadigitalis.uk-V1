@@ -1,0 +1,69 @@
+---
+// src/pages/republic/index.astro
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import NoteCard from '../../../components/cards/NoteCard.astro';
+
+// 1. Import the PageWrapper component
+import PageWrapper from '../../../components/layouts/PageWrapper.astro';
+
+const allNotes = await getCollection('notes');
+const publishedNotes = allNotes.filter(note => note.data.publish === true);
+---
+
+<BaseLayout frontmatter={{ title: 'Notes | Respublica Digitalis' }}>
+  <!-- 2. Wrap all page content in the PageWrapper -->
+  <PageWrapper>
+    <!-- This header section remains directly on the page -->
+    <section class="base-content">
+      <h1>Notes</h1>
+      <p>Here is a collection of notes.</p>
+    </section> 
+
+    <div class="gallery-grid">
+      {publishedNotes.map(note => (
+        <NoteCard
+          slug={note.slug}
+          title={note.data.title}
+          description={note.data.description}
+        />
+      ))}
+    </div>
+  </PageWrapper>
+</BaseLayout>
+
+<style>
+  /* --- PAGE-SPECIFIC STYLES --- */
+
+  /* 3. The .main-content-container style is GONE because PageWrapper handles it. */
+  /* The styles for the header and grid remain here. */
+
+  .base-content {
+    padding: 20px 0;
+    text-align: left;
+    max-width: 1100px; 
+    margin: 0 auto;
+  }
+ 
+  .base-content h1 {
+    font-family: 'Cormorant SC', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .base-content p {
+    font-family: 'Sorts Mill Goudy', serif;
+    font-size: 1.3em;
+    line-height: 1.8;
+    margin: 20px 0 30px 0;
+  }
+
+  .gallery-grid {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 0 auto;
+  }
+</style>

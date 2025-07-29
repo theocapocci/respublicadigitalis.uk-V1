@@ -1,0 +1,22 @@
+---
+// src/components/layouts/PageWrapper.astro
+---
+
+<div class="main-content-container">
+  <!-- The <slot /> tag is a placeholder. -->
+  <!-- Any content you put inside <PageWrapper> on another page will be rendered here. -->
+  <slot />
+</div>
+
+<style>
+  /* 
+    This is the centralized style for your main content area.
+    Edit it here to change it across your entire site.
+  */
+  .main-content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+</style>
+

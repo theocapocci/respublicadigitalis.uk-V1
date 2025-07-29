@@ -1,0 +1,42 @@
+---
+// src/pages/republic/notes/[slug].astro
+
+import { getCollection } from 'astro:content';
+// Assuming ContentLayout is your standard layout for displaying Markdown.
+import ContentLayout from '../../../layouts/ContentLayout.astro'; 
+
+export async function getStaticPaths() {
+  // --- DEBUG STEP 1: Get ALL entries without any filtering.
+  const allEntries = await getCollection('notes');
+
+  // --- DEBUG STEP 2: Print the slugs of every single file Astro finds.
+  console.log("ALL FOUND NOTE SLUGS:", allEntries.map(e => e.slug));
+
+  // --- Your original filtering logic is here.
+  const notesEntries = allEntries.filter(entry => {
+    return entry.data.publish === true;
+  });
+  
+  // --- DEBUG STEP 3: Print the slugs of the files that passed the filter.
+  console.log("PUBLISHING THESE PAGES:", notesEntries.map(e => e.slug));
+
+  return notesEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// Get the specific 'entry' for this page from the props passed by getStaticPaths.
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<!-- Using the ContentLayout you provided. The frontmatter is passed to the layout. -->
+<ContentLayout frontmatter={entry.data}>
+  <!-- The <article> tag provides semantic meaning for your content -->
+  <!-- The 'prose' class is great for styling markdown output -->
+  <article class="prose">
+    <!-- This renders the actual Markdown content from your file -->
+    <Content />
+  </article>
+</ContentLayout> <!-- IMPORTANT: Corrected the closing tag to match -->
