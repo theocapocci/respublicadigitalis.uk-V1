@@ -120,6 +120,16 @@ async function syncContent() {
                 return `![${cleanAssetName}](../../images/notes/${assetSlug})`;
             });
             
+            // ### START of MODIFICATION ###
+            // Replace null values in frontmatter with empty strings
+            // to avoid outputting "key: null" in the markdown file.
+            for (const key in note.data) {
+                if (Object.prototype.hasOwnProperty.call(note.data, key) && note.data[key] === null) {
+                    note.data[key] = '';
+                }
+            }
+            // ### END of MODIFICATION ###
+
             const outputContent = matter.stringify(transformedContent, note.data);
             const outputPath = path.join(note.config.astroDir, `${note.slug}.md`);
             await fs.writeFile(outputPath, outputContent, 'utf8');
