@@ -120,9 +120,8 @@ async function syncContent() {
                 return `![${cleanAssetName}](../../images/notes/${assetSlug})`;
             });
             
-            // ### START of MODIFICATION ###
-            // Pass options to the stringify function. This tells the underlying YAML engine
-            // to render `null` values as empty (e.g., "tags:") instead of "tags: null".
+            console.log(`Stringifying data for ${note.slug}:`, note.data); // <-- ADD THIS LINE
+
             const outputContent = matter.stringify(transformedContent, note.data, {
                 styles: {
                     '!!null': 'empty'
