@@ -1,29 +1,37 @@
 // src/content/config.ts
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
-// Schema for the "notes" collection
-const notesSchema = z.object({
-  title: z.string(),
-  description: z.string().optional().nullable(), // Allow string, optional, or null
-  image: z.string().optional().nullable(),       // Allow string, optional, or null
-  tags: z.array(z.string()).optional().nullable(), // Allow string array, optional, or null
-  publish: z.boolean().optional(),
-  date: z.date().optional().nullable(),         // Allow date, optional, or null
-  uid: z.string().optional().nullable(),        // Allow string, optional, or null
+
+const notesCollection = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/notes' }), // Here's the loader!
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    publish: z.boolean().optional(),
+    uid: z.string().optional(),
+    datePublished: z.date().optional(),
+    dateUpdated: z.date().optional(),
+  }),
 });
 
-// Schema for the "literature" collection (you may want to update this too)
-const literatureSchema = z.object({
-  title: z.string(),
-  description: z.string().optional().nullable(),
-  image: z.string().optional().nullable(),
-  tags: z.array(z.string()).optional().nullable(),
-  publish: z.boolean().optional(),
-  date: z.date().optional().nullable(),
+const literatureCollection = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/literature' }), // Here's the loader!
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    cover: image().optional(),
+    tags: z.array(z.string()).optional(),
+    publish: z.boolean().optional(),
+    datePublished: z.date().optional(),
+    dateUpdated: z.date().optional(),
+  }),
 });
 
-// Register the collections
+
+
 export const collections = {
-  'notes': defineCollection({ schema: notesSchema }),
-  'literature': defineCollection({ schema: literatureSchema }),
+  notes: notesCollection,
+  literature: literatureCollection
 };

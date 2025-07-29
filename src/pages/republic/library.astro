@@ -1,6 +1,7 @@
 ---
 // src/pages/library.astro
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets'; // ADDED: Import Astro's Image component
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // 1. Fetch all literature notes
@@ -22,10 +23,13 @@ const publishedLiterature = allLiterature
       {publishedLiterature.map(note => (
         <a href={`/literature/${note.slug}`} class="gallery-item">
           {note.data.image && (
-            <img 
-              src={`/assets/images/${note.data.image}`} 
+            // --- CHANGED: Replaced the standard <img> tag with Astro's <Image /> component ---
+            <Image 
+              src={note.data.image} 
               alt={`Cover for ${note.data.title}`} 
-              class="card-image" 
+              class="card-image"
+              widths={[200, 400]}
+              sizes="(max-width: 600px) 200px, 400px"
             />
           )}
         </a>
