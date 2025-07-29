@@ -19,6 +19,6 @@
     "nodemon": "^3.1.10"
   },
   "overrides": {
-    "js-yaml": "4.1.0"
+    "js-yaml": "3.14.1"
   }
 }
