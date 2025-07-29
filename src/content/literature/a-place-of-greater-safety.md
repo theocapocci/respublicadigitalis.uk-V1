@@ -1,5 +1,7 @@
 ---
-title: 'A Place of Greater Safety, by Hilary Mantel'
+title: A Place of Greater Safety
+author: 'Mantel, Hilary'
+date: '1993'
 description: placeholder
 cover: ../images/books/mantel1993.jpg
 tags:
