@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 // --- TYPE DEFINITIONS (Our "Contract") ---
-interface TimelineNote { type: 'Note'; title: string; uid?: string; url: string; sortDate: Date; content: any; description?: string; tags?: string[]; }
+interface TimelineNote { type: 'Note'; title: string; uid?: string; url: string; sortDate: Date; content: any; tags?: string[]; }
 interface TimelineBook { type: 'Book'; title: string; author?: string; url: string; sortDate: Date; content: any; description?: string; tags?: string[]; }
 export type TimelineItem = TimelineNote | TimelineBook;
 
@@ -21,7 +21,6 @@ async function transformNoteToTimelineItem(item: CollectionEntry<'notes'>): Prom
     url: `/republic/notes/${item.slug}`,
     sortDate: item.data.datePublished,
     content: Content,
-    description: item.data.description,
     tags: item.data.tags,
   };
 }
@@ -36,7 +35,6 @@ async function transformLiteratureToTimelineItem(item: CollectionEntry<'literatu
     url: `/republic/literature/${item.slug}`,
     sortDate: item.data.datePublished,
     content: Content,
-    description: item.data.description,
     tags: item.data.tags,
   };
 }

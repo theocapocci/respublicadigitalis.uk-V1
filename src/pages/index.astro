@@ -42,7 +42,6 @@ const noteItems = await getRecentNotes(4);
               <NoteCard
                 slug={note.slug}
                 title={note.data.title}
-                description={note.data.description}
                 tags={note.data.tags}
                 uid={note.data.uid}
                 datePublished={note.data.datePublished}
