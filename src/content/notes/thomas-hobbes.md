@@ -1,6 +1,6 @@
 ---
 uid: '1'
-title: The Significance of Thomas Hobbes
+title: Thomas Hobbes
 aliases:
   - significance of Thomas Hobbes
 tags:
