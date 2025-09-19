@@ -55,8 +55,4 @@ ___
 The first thing I want is the extract from Leviathan about ‘that Mortall God’.
 
 - Insert ‘Mortall God’ quote
-
-
-
-
 ___
